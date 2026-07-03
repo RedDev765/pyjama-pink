@@ -693,6 +693,8 @@
     .hero p{ font-size:1rem; }
     .card-body{ padding:16px 18px 20px; }
     .card-body h3{ font-size:1rem; }
+    .modal{ padding:28px 24px; }
+    .cart-drawer{ width:100%; }
   }
   @media (max-width: 480px){
     .hero-inner{ gap:32px; }
@@ -717,13 +719,135 @@
     .insta-callout{ padding:28px 20px; }
     .insta-gallery{ grid-template-columns:repeat(2,1fr); gap:6px; }
     .collection-switch{ gap:8px; }
-    .switch-pill{ font-size:0.82rem; padding:8px 16px; }
+    .modal{ padding:20px 16px; }
+    .modal-img{ border-radius:12px; }
   }
   @media (max-width: 380px){
     .insta-gallery{ grid-template-columns:1fr; }
   }
 
-  /* ---------- CREATIVE ANIMATIONS ---------- */
+  /* ---------- CART TOGGLE ---------- */
+  .cart-toggle{
+    background:none; border:none; color:var(--cream); cursor:pointer;
+    position:relative; padding:4px; margin-left:10px;
+  }
+  .cart-toggle svg{ width:24px; height:24px; display:block; }
+  .cart-count{
+    position:absolute; top:-4px; right:-6px;
+    background:var(--moon-pink); color:var(--night-deep);
+    font-size:0.65rem; font-weight:800;
+    width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---------- PRODUCT MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(36,22,56,0.7); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal{
+    background:var(--cream-card); border-radius:var(--radius);
+    max-width:560px; width:100%; max-height:90vh; overflow-y:auto;
+    padding:40px; position:relative;
+    animation:modalIn 0.4s cubic-bezier(.25,.46,.45,.94) forwards;
+  }
+  @keyframes modalIn{
+    from{ opacity:0; transform:translateY(30px) scale(0.97); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  .modal-close{
+    position:absolute; top:16px; right:16px;
+    background:none; border:none; cursor:pointer;
+    font-size:1.4rem; color:var(--ink-soft); line-height:1; padding:6px;
+  }
+  .modal-img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:16px; margin-bottom:20px; }
+  .modal-category{
+    font-size:0.72rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--moon-pink); margin-bottom:6px;
+  }
+  .modal h2{ font-family:'Fraunces',serif; font-size:1.5rem; margin-bottom:6px; }
+  .modal-price{ font-weight:700; font-size:1.2rem; color:var(--moon-pink); margin-bottom:4px; }
+  .modal-stock{ font-size:0.85rem; color:var(--ink-soft); margin-bottom:16px; }
+  .modal-desc{ color:var(--ink-soft); line-height:1.7; margin-bottom:24px; }
+  .modal-qty{
+    display:flex; align-items:center; gap:12px; margin-bottom:20px;
+  }
+  .modal-qty label{ font-weight:600; font-size:0.9rem; }
+  .modal-qty input{
+    width:60px; padding:8px 10px; border:2px solid #E8E0EC; border-radius:10px;
+    font-size:0.95rem; font-weight:600; text-align:center;
+  }
+  .modal-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+  .modal-actions .btn{ flex:1; min-width:140px; justify-content:center; }
+
+  /* ---------- CART DRAWER ---------- */
+  .cart-drawer-overlay{
+    position:fixed; inset:0; z-index:99;
+    background:rgba(36,22,56,0.5);
+    display:none;
+  }
+  .cart-drawer-overlay.open{ display:block; }
+  .cart-drawer{
+    position:fixed; top:0; right:0; bottom:0; z-index:100;
+    width:400px; max-width:100vw;
+    background:var(--cream-card);
+    display:flex; flex-direction:column;
+    transform:translateX(100%);
+    transition:transform 0.4s cubic-bezier(.25,.46,.45,.94);
+  }
+  .cart-drawer.open{ transform:translateX(0); }
+  .cart-drawer-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 24px; border-bottom:1px solid #EEE8F2;
+  }
+  .cart-drawer-header h3{ font-family:'Fraunces',serif; font-size:1.2rem; }
+  .cart-drawer-close{ background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink-soft); padding:4px; line-height:1; }
+  .cart-items{ flex:1; overflow-y:auto; padding:16px 24px; }
+  .cart-item{
+    display:flex; gap:14px; padding:14px 0; border-bottom:1px solid #F5F0F8;
+  }
+  .cart-item-img{
+    width:64px; height:80px; object-fit:cover; border-radius:10px; flex-shrink:0;
+  }
+  .cart-item-info{ flex:1; }
+  .cart-item-name{ font-weight:600; font-size:0.9rem; margin-bottom:2px; }
+  .cart-item-price{ font-size:0.85rem; color:var(--moon-pink); font-weight:600; }
+  .cart-item-qty{ display:flex; align-items:center; gap:8px; margin-top:6px; }
+  .cart-item-qty button{
+    width:28px; height:28px; border-radius:50%; border:1px solid #E8E0EC;
+    background:var(--cream); cursor:pointer; font-weight:700; font-size:0.9rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cart-item-qty span{ font-weight:600; font-size:0.9rem; min-width:16px; text-align:center; }
+  .cart-item-remove{ color:var(--ink-soft); font-size:0.78rem; cursor:pointer; border:none; background:none; padding:0; margin-top:4px; text-decoration:underline; }
+  .cart-drawer-footer{
+    padding:20px 24px; border-top:1px solid #EEE8F2;
+  }
+  .cart-total{ display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; margin-bottom:12px; }
+  .cart-empty{ text-align:center; padding:48px 0; color:var(--ink-soft); }
+  .cart-empty svg{ width:48px; height:48px; opacity:0.3; margin-bottom:12px; }
+
+  /* ---------- CONFIRMATION MODAL ---------- */
+  .confirm-overlay{
+    position:fixed; inset:0; z-index:101;
+    background:rgba(36,22,56,0.7); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; padding:24px;
+  }
+  .confirm-overlay.open{ display:flex; }
+  .confirm-box{
+    background:var(--cream-card); border-radius:var(--radius);
+    max-width:480px; width:100%; padding:40px; text-align:center;
+    animation:modalIn 0.4s cubic-bezier(.25,.46,.45,.94) forwards;
+  }
+  .confirm-box .check{ font-size:3rem; margin-bottom:8px; }
+  .confirm-box h2{ font-family:'Fraunces',serif; margin-bottom:8px; }
+  .confirm-box p{ color:var(--ink-soft); margin-bottom:8px; font-size:0.92rem; }
+  .confirm-box .total{ font-size:1.3rem; font-weight:700; color:var(--moon-pink); margin:12px 0; }
+  .confirm-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; justify-content:center; }
+  .confirm-actions .btn{ min-width:140px; justify-content:center; }
   .card:hover .card-photo img {
     transform: scale(1.04);
   }
@@ -985,6 +1109,10 @@
         </li>
       </ul>
       <button class="menu-toggle" aria-label="Menu">☰</button>
+      <button class="cart-toggle" aria-label="Panier" id="cartToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count">0</span>
+      </button>
     </nav>
   </div>
 </header>
@@ -1307,6 +1435,52 @@
   </div>
 </footer>
 
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <div class="modal-category" id="modalCategory"></div>
+    <h2 id="modalName"></h2>
+    <div class="modal-price" id="modalPrice"></div>
+    <div class="modal-stock" id="modalStock"></div>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-qty">
+      <label>Quantité</label>
+      <input type="number" id="modalQty" value="1" min="1" max="99">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" style="background:var(--moon-pink);color:var(--night-deep);flex:1;" id="modalAddCart">Ajouter au panier</button>
+      <button class="btn btn-whatsapp" id="modalBuyNow">Commander maintenant</button>
+    </div>
+  </div>
+</div>
+
+<div class="cart-drawer-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <h3>Mon panier</h3>
+    <button class="cart-drawer-close" id="cartClose">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-drawer-footer" id="cartFooter">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">0 DH</span></div>
+    <button class="btn btn-whatsapp" style="width:100%;justify-content:center;" id="cartCheckout">Commander sur WhatsApp</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="check">✓</div>
+    <h2>Commande envoyée !</h2>
+    <p>Votre commande a été préparée. Vous allez être redirigée vers WhatsApp pour finaliser.</p>
+    <div class="total" id="confirmTotal"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline-dark" id="confirmClose">Continuer mes achats</button>
+      <a class="btn btn-whatsapp" id="confirmLink" target="_blank" rel="noopener">Ouvrir WhatsApp</a>
+    </div>
+  </div>
+</div>
+
 <a class="float-wa" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.05 2h-.01zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.09-3.28-.68-2.76-.94-4.53-3.75-4.67-3.92-.13-.18-1.12-1.49-1.12-2.85s.7-2.02.95-2.3c.24-.27.53-.34.71-.34.18 0 .36 0 .51.01.17.01.38-.06.6.46.24.56.8 1.94.87 2.08.07.13.11.29.02.47-.09.18-.14.29-.27.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.15.27.68 1.12 1.46 1.81 1 .89 1.85 1.17 2.11 1.3.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.06.13.06.71-.18 1.39z"/></svg>
 </a>
@@ -1317,18 +1491,18 @@
   const CURRENT_VERSION = '2.0';
 
   const DEFAULT_PRODUCTS = [
-    { id: 'p1', name: 'Pyjama Feuilles Corail', category: 'pyjama', price: 149, stock: 6, photo: 'https://images.unsplash.com/photo-1770294758981-484ef12c1815?w=500&h=625&fit=crop' },
-    { id: 'p2', name: 'Pyjama Pêche Douceur', category: 'pyjama', price: 149, stock: 4, photo: 'https://images.unsplash.com/photo-1766056278948-dbb10f6d82bf?w=500&h=625&fit=crop' },
-    { id: 'p3', name: 'Pyjama Zébrures Bordeaux', category: 'pyjama', price: 149, stock: 3, photo: 'https://images.unsplash.com/photo-1766056278825-55168658f120?w=500&h=625&fit=crop' },
-    { id: 'p6', name: 'Pyjama Papillons Mauve', category: 'pyjama', price: 149, stock: 5, photo: 'https://images.unsplash.com/photo-1768696082668-411638a55476?w=500&h=625&fit=crop' },
-    { id: 'p7', name: 'Pyjama Cheval Ocre', category: 'pyjama', price: 149, stock: 4, photo: 'https://images.unsplash.com/photo-1767785829300-28722d89e696?w=500&h=625&fit=crop' },
-    { id: 'p8', name: 'Pyjama Nœuds Ciel', category: 'pyjama', price: 149, stock: 3, photo: 'https://images.unsplash.com/photo-1770294760762-1cd821ecc567?w=500&h=625&fit=crop' },
-    { id: 'p4', name: 'Ensemble Dentelle Nuit', category: 'lingerie', price: 290, stock: 5, photo: 'https://images.unsplash.com/photo-1624035203840-8121a20672d5?w=500&h=625&fit=crop' },
-    { id: 'p5', name: 'Nuisette Satin Élégance', category: 'lingerie', price: 340, stock: 2, photo: 'https://images.unsplash.com/photo-1584061554353-f8c337f5dbb9?w=500&h=625&fit=crop' },
-    { id: 'p9', name: 'Ensemble Rétro Chic', category: 'lingerie', price: 310, stock: 4, photo: 'https://images.unsplash.com/photo-1620228757753-b28dacf3015a?w=500&h=625&fit=crop' },
-    { id: 'p10', name: 'Body Dentelle Fine', category: 'lingerie', price: 260, stock: 3, photo: 'https://images.unsplash.com/photo-1599839770015-53df36f312a8?w=500&h=625&fit=crop' },
-    { id: 'p11', name: 'Ensemble Tulle Doré', category: 'lingerie', price: 355, stock: 2, photo: 'https://images.unsplash.com/photo-1560011081-a5dbd7c6b1d2?w=500&h=625&fit=crop' },
-    { id: 'p12', name: 'Nuisette Minimaliste', category: 'lingerie', price: 245, stock: 4, photo: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=625&fit=crop' },
+    { id: 'p1', name: 'Pyjama Feuilles Corail', category: 'pyjama', price: 149, stock: 6, photo: 'https://images.unsplash.com/photo-1770294758981-484ef12c1815?w=500&h=625&fit=crop', desc: 'Matinées douces et brunchs tranquilles. Coupe classique, tissu léger et respirant parfait pour traîner à la maison.' },
+    { id: 'p2', name: 'Pyjama Pêche Douceur', category: 'pyjama', price: 149, stock: 4, photo: 'https://images.unsplash.com/photo-1766056278948-dbb10f6d82bf?w=500&h=625&fit=crop', desc: 'Une teinte pêche qui illumine le quotidien. Col rond, manches courtes, idéal pour les soirées d\'été.' },
+    { id: 'p3', name: 'Pyjama Zébrures Bordeaux', category: 'pyjama', price: 149, stock: 3, photo: 'https://images.unsplash.com/photo-1766056278825-55168658f120?w=500&h=625&fit=crop', desc: 'Motif zébrure raffiné sur fond bordeaux. Coupe moderne, confortable, pour celles qui aiment le style sans sacrifier le confort.' },
+    { id: 'p6', name: 'Pyjama Papillons Mauve', category: 'pyjama', price: 149, stock: 5, photo: 'https://images.unsplash.com/photo-1768696082668-411638a55476?w=500&h=625&fit=crop', desc: 'Imprimé papillons délicat sur fond mauve. Short assorti, tissu tout doux pour des nuits paisibles.' },
+    { id: 'p7', name: 'Pyjama Cheval Ocre', category: 'pyjama', price: 149, stock: 4, photo: 'https://images.unsplash.com/photo-1767785829300-28722d89e696?w=500&h=625&fit=crop', desc: 'Motif cheval bohème aux teintes ocres. Un pyjama qui sort de l\'ordinaire, pour les soirées à la cool.' },
+    { id: 'p8', name: 'Pyjama Nœuds Ciel', category: 'pyjama', price: 149, stock: 3, photo: 'https://images.unsplash.com/photo-1770294760762-1cd821ecc567?w=500&h=625&fit=crop', desc: 'Petits nœuds célestes sur fond bleu ciel. Ensemble chemise-short, léger et aérien.' },
+    { id: 'p4', name: 'Ensemble Dentelle Nuit', category: 'lingerie', price: 290, stock: 5, photo: 'https://images.unsplash.com/photo-1624035203840-8121a20672d5?w=500&h=625&fit=crop', desc: 'Ensemble dentelle noir intemporel. Soutien-gorge triangle ajustable et shorty taille haute. Pour se sentir belle en toute intimité.' },
+    { id: 'p5', name: 'Nuisette Satin Élégance', category: 'lingerie', price: 340, stock: 2, photo: 'https://images.unsplash.com/photo-1584061554353-f8c337f5dbb9?w=500&h=625&fit=crop', desc: 'Nuisette en satin brillant, bretelles fines réglables. Tombe fluide sur le corps, idéale pour les occasions spéciales.' },
+    { id: 'p9', name: 'Ensemble Rétro Chic', category: 'lingerie', price: 310, stock: 4, photo: 'https://images.unsplash.com/photo-1620228757753-b28dacf3015a?w=500&h=625&fit=crop', desc: 'Inspiration rétro avec une touche moderne. Dentelle fleurie, coupe taille haute, soutien-gorge à armatures.' },
+    { id: 'p10', name: 'Body Dentelle Fine', category: 'lingerie', price: 260, stock: 3, photo: 'https://images.unsplash.com/photo-1599839770015-53df36f312a8?w=500&h=625&fit=crop', desc: 'Body en dentelle fine, fermeture à pression. Parfait sous un chemisier ou porté seul. Confortable et élégant.' },
+    { id: 'p11', name: 'Ensemble Tulle Doré', category: 'lingerie', price: 355, stock: 2, photo: 'https://images.unsplash.com/photo-1560011081-a5dbd7c6b1d2?w=500&h=625&fit=crop', desc: 'Ensemble tulle avec accents dorés. Soutien-gorge corbeille et string assorti. Pour les soirées où on veut briller.' },
+    { id: 'p12', name: 'Nuisette Minimaliste', category: 'lingerie', price: 245, stock: 4, photo: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=625&fit=crop', desc: 'Nuisette minimaliste en microfibre douce. Coupe épurée, confort absolu. L\'essentiel pour se sentir bien.' },
   ];
 
   function loadProducts() {
@@ -1356,7 +1530,7 @@
 
     if (pyjamaGrid) {
       pyjamaGrid.innerHTML = pyjamas.map(p => `
-        <div class="card reveal">
+        <div class="card reveal" data-id="${p.id}">
           <div class="card-photo">
             ${p.photo ? `<img src="${p.photo}" loading="lazy" alt="${p.name}">` : `<img src="https://picsum.photos/seed/${p.id}/500/625" loading="lazy" alt="${p.name}">`}
             <div class="card-photo-tint" style="background:linear-gradient(160deg, #F6E4EC, #EFE1F6);"></div>
@@ -1364,7 +1538,7 @@
           <div class="card-body">
             <h3>${p.name}</h3>
             <span class="price">${p.price} DH</span>
-            <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20${encodeURIComponent(p.name)}" target="_blank" rel="noopener">Commander</a>
+            <button class="btn btn-outline-dark btn-small add-cart-btn" data-id="${p.id}">Ajouter</button>
           </div>
         </div>
       `).join('');
@@ -1372,7 +1546,7 @@
 
     if (lingerieGrid) {
       lingerieGrid.innerHTML = lingeries.map(p => `
-        <div class="card reveal">
+        <div class="card reveal" data-id="${p.id}">
           <div class="card-photo">
             ${p.photo ? `<img src="${p.photo}" loading="lazy" alt="${p.name}">` : `<img src="https://picsum.photos/seed/${p.id}/500/625" loading="lazy" alt="${p.name}">`}
             <div class="card-photo-tint" style="background:linear-gradient(160deg, #2C1D45, #241638);"></div>
@@ -1380,7 +1554,7 @@
           <div class="card-body">
             <h3>${p.name}</h3>
             <span class="price">${p.price} DH</span>
-            <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20${encodeURIComponent(p.name)}" target="_blank" rel="noopener">Commander</a>
+            <button class="btn btn-small add-cart-btn" style="background:var(--gold); color:#2C1D45;" data-id="${p.id}">Ajouter</button>
           </div>
         </div>
       `).join('');
@@ -1532,6 +1706,189 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   document.querySelectorAll('section[id], footer[id]').forEach(el => sectionObserver.observe(el));
 
   renderDynamicProducts();
+
+  /* ---------- PRODUCT MODAL ---------- */
+  const modal = document.getElementById('productModal');
+  const modalImg = document.getElementById('modalImg');
+  const modalCategory = document.getElementById('modalCategory');
+  const modalName = document.getElementById('modalName');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalStock = document.getElementById('modalStock');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalQty = document.getElementById('modalQty');
+  let currentProduct = null;
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.card[data-id]');
+    if (card && !e.target.closest('.add-cart-btn')) {
+      const products = loadProducts();
+      const p = products.find(x => x.id === card.dataset.id);
+      if (!p) return;
+      currentProduct = p;
+      modalImg.src = p.photo || `https://picsum.photos/seed/${p.id}/500/625`;
+      modalCategory.textContent = p.category === 'pyjama' ? 'Pyjama' : 'Lingerie';
+      modalName.textContent = p.name;
+      modalPrice.textContent = p.price + ' DH';
+      modalStock.textContent = p.stock > 0 ? 'En stock' : 'Rupture';
+      modalStock.style.color = p.stock > 0 ? 'var(--ink-soft)' : '#E07070';
+      modalDesc.textContent = p.desc || '';
+      modalQty.value = 1;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+
+  document.getElementById('modalClose').addEventListener('click', () => {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  modal.addEventListener('click', (e) => { if (e.target === modal) { modal.classList.remove('open'); document.body.style.overflow = ''; } });
+
+  document.getElementById('modalAddCart').addEventListener('click', () => {
+    if (!currentProduct) return;
+    const qty = Math.max(1, parseInt(modalQty.value) || 1);
+    let cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    const existing = cart.find(item => item.id === currentProduct.id);
+    if (existing) { existing.qty += qty; } else { cart.push({ id: currentProduct.id, qty }); }
+    localStorage.setItem('pyjamapink_cart', JSON.stringify(cart));
+    updateCartUI();
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  document.getElementById('modalBuyNow').addEventListener('click', () => {
+    if (!currentProduct) return;
+    const qty = Math.max(1, parseInt(modalQty.value) || 1);
+    const total = currentProduct.price * qty;
+    const msg = `Bonjour Hanan %F0%9F%8C%99%2C je souhaite commander :%0A%0A- ${currentProduct.name} x${qty} = ${total} DH%0A%0ATotal : ${total} DH`;
+    window.open(`https://wa.me/212622993031?text=${msg}`, '_blank');
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  /* ---------- CART ---------- */
+  const cartToggle = document.getElementById('cartToggle');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartOverlay = document.getElementById('cartOverlay');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+
+  function updateCartUI() {
+    const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    const products = loadProducts();
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    document.querySelector('.cart-count').textContent = count;
+
+    if (!cartItems) return;
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>Votre panier est vide</p></div>';
+      cartTotal.textContent = '0 DH';
+      document.getElementById('cartFooter').style.display = 'none';
+      return;
+    }
+    document.getElementById('cartFooter').style.display = '';
+    let total = 0;
+    cartItems.innerHTML = cart.map(item => {
+      const p = products.find(x => x.id === item.id);
+      if (!p) return '';
+      total += p.price * item.qty;
+      return `
+        <div class="cart-item" data-id="${p.id}">
+          <img class="cart-item-img" src="${p.photo || `https://picsum.photos/seed/${p.id}/100/125`}" alt="${p.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${p.name}</div>
+            <div class="cart-item-price">${p.price} DH</div>
+            <div class="cart-item-qty">
+              <button class="cart-dec">−</button>
+              <span>${item.qty}</span>
+              <button class="cart-inc">+</button>
+            </div>
+            <button class="cart-item-remove">Retirer</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    cartTotal.textContent = total + ' DH';
+  }
+
+  cartToggle.addEventListener('click', () => {
+    cartDrawer.classList.add('open');
+    cartOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateCartUI();
+  });
+
+  function closeCart() {
+    cartDrawer.classList.remove('open');
+    cartOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+
+  cartItems.addEventListener('click', (e) => {
+    const item = e.target.closest('.cart-item');
+    if (!item) return;
+    const id = item.dataset.id;
+    let cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    if (e.target.classList.contains('cart-inc')) {
+      const found = cart.find(i => i.id === id);
+      if (found) found.qty++;
+    } else if (e.target.classList.contains('cart-dec')) {
+      const found = cart.find(i => i.id === id);
+      if (found) { found.qty--; if (found.qty < 1) cart = cart.filter(i => i.id !== id); }
+    } else if (e.target.classList.contains('cart-item-remove')) {
+      cart = cart.filter(i => i.id !== id);
+    } else return;
+    localStorage.setItem('pyjamapink_cart', JSON.stringify(cart));
+    updateCartUI();
+  });
+
+  document.getElementById('cartCheckout').addEventListener('click', () => {
+    const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    const products = loadProducts();
+    if (cart.length === 0) return;
+    let lines = [], total = 0;
+    cart.forEach(item => {
+      const p = products.find(x => x.id === item.id);
+      if (!p) return;
+      lines.push(`- ${p.name} x${item.qty} = ${p.price * item.qty} DH`);
+      total += p.price * item.qty;
+    });
+    const msg = `Bonjour Hanan %F0%9F%8C%99%2C je souhaite commander :%0A%0A${lines.join('%0A')}%0A%0ATotal : ${total} DH%0A%0AMerci de me confirmer la disponibilit%C3%A9 et le total livraison.`;
+    document.getElementById('confirmTotal').textContent = 'Total : ' + total + ' DH';
+    document.getElementById('confirmLink').href = `https://wa.me/212622993031?text=${msg}`;
+    closeCart();
+    document.getElementById('confirmOverlay').classList.add('open');
+  });
+
+  document.getElementById('confirmClose').addEventListener('click', () => {
+    document.getElementById('confirmOverlay').classList.remove('open');
+  });
+  document.getElementById('confirmOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('confirmOverlay')) document.getElementById('confirmOverlay').classList.remove('open');
+  });
+
+  /* ---------- ADD TO CART FROM GRID ---------- */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-cart-btn');
+    if (!btn) return;
+    e.stopPropagation();
+    const id = btn.dataset.id;
+    const products = loadProducts();
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    let cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    const existing = cart.find(item => item.id === id);
+    if (existing) { existing.qty++; } else { cart.push({ id, qty: 1 }); }
+    localStorage.setItem('pyjamapink_cart', JSON.stringify(cart));
+    updateCartUI();
+    btn.textContent = '✓ Ajouté';
+    setTimeout(() => { btn.textContent = 'Ajouter'; }, 1200);
+  });
+
+  updateCartUI();
+  document.getElementById('cartFooter').style.display = 'none';
 </script>
 
 </body>
