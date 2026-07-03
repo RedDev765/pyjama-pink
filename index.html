@@ -567,35 +567,50 @@
   }
 
   /* ---------- SCROLL REVEAL ---------- */
-  .reveal,
-  .reveal-left,
-  .reveal-right,
-  .reveal-scale{
+  .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur{
     opacity:0;
-    transition:opacity 0.9s cubic-bezier(.25,.46,.45,.94), transform 0.9s cubic-bezier(.25,.46,.45,.94);
   }
-  .reveal{ transform:translateY(40px); }
-  .reveal-left{ transform:translateX(-50px); }
-  .reveal-right{ transform:translateX(50px); }
-  .reveal-scale{ transform:scale(0.92); }
-  .reveal.in-view{ opacity:1; transform:translateY(0); }
-  .reveal-left.in-view{ opacity:1; transform:translateX(0); }
-  .reveal-right.in-view{ opacity:1; transform:translateX(0); }
-  .reveal-scale.in-view{ opacity:1; transform:scale(1); }
-  .grid .card.reveal{ transition-delay:var(--stagger, 0s); }
+  .reveal.in-view{ animation:revealUp 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .reveal-left.in-view{ animation:revealLeft 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .reveal-right.in-view{ animation:revealRight 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .reveal-scale.in-view{ animation:revealScale 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .reveal-blur.in-view{ animation:revealBlur 1.3s cubic-bezier(.25,.46,.45,.94) forwards; }
+  @keyframes revealUp{
+    0%{ opacity:0; transform:translateY(40px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes revealLeft{
+    0%{ opacity:0; transform:translateX(-50px); }
+    100%{ opacity:1; transform:translateX(0); }
+  }
+  @keyframes revealRight{
+    0%{ opacity:0; transform:translateX(50px); }
+    100%{ opacity:1; transform:translateX(0); }
+  }
+  @keyframes revealScale{
+    0%{ opacity:0; transform:scale(0.92); }
+    100%{ opacity:1; transform:scale(1); }
+  }
+  @keyframes revealBlur{
+    0%{ opacity:0; filter:blur(8px); transform:translateY(20px); }
+    100%{ opacity:1; filter:blur(0); transform:translateY(0); }
+  }
+  .grid .card.reveal{ animation-delay:var(--stagger, 0s); }
 
   /* ---------- STAGGERED GROUP REVEAL ---------- */
   .reveal-group > .reveal-child{
     opacity:0;
-    transform:translateY(30px);
-    transition:opacity 0.7s cubic-bezier(.25,.46,.45,.94), transform 0.7s cubic-bezier(.25,.46,.45,.94);
+    transform:translateY(24px);
   }
-  .reveal-group.in-view > .reveal-child{ opacity:1; transform:translateY(0); }
-  .reveal-group.in-view > .reveal-child:nth-child(1){ transition-delay:0.05s; }
-  .reveal-group.in-view > .reveal-child:nth-child(2){ transition-delay:0.15s; }
-  .reveal-group.in-view > .reveal-child:nth-child(3){ transition-delay:0.25s; }
-  .reveal-group.in-view > .reveal-child:nth-child(4){ transition-delay:0.35s; }
-  .reveal-group.in-view > .reveal-child:nth-child(5){ transition-delay:0.45s; }
+  .reveal-group.in-view > .reveal-child:nth-child(1){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.05s forwards; }
+  .reveal-group.in-view > .reveal-child:nth-child(2){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.15s forwards; }
+  .reveal-group.in-view > .reveal-child:nth-child(3){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.25s forwards; }
+  .reveal-group.in-view > .reveal-child:nth-child(4){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.35s forwards; }
+  .reveal-group.in-view > .reveal-child:nth-child(5){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.45s forwards; }
+  @keyframes revealChild{
+    0%{ opacity:0; transform:translateY(24px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
 
   /* ---------- HERO ENTRANCE ---------- */
   .hero-eyebrow, .hero h1, .hero p, .hero-ctas{
