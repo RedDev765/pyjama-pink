@@ -597,6 +597,14 @@
   }
   .grid .card.reveal{ animation-delay:var(--stagger, 0s); }
 
+  /* ---------- SKIP ANIMATION FOR ELEMENTS ALREADY VISIBLE ON LOAD ---------- */
+  .reveal-visible, .reveal-visible.reveal-left, .reveal-visible.reveal-right, .reveal-visible.reveal-scale, .reveal-visible.reveal-blur{
+    opacity:1 !important; transform:none !important; filter:none !important;
+  }
+  .reveal-visible.reveal-group > .reveal-child{
+    opacity:1 !important; transform:none !important;
+  }
+
   /* ---------- STAGGERED GROUP REVEAL ---------- */
   .reveal-group > .reveal-child{
     opacity:0;
@@ -1291,7 +1299,13 @@
       `).join('');
     }
 
-document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => revealObserver.observe(el));
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add('reveal-visible');
+      } else {
+        revealObserver.observe(el);
+      }
+    });
      document.querySelectorAll('.grid').forEach(grid => {
       grid.querySelectorAll('.card').forEach((card, i) => {
         card.style.setProperty('--stagger', (i % 3) * 0.12 + 's');
@@ -1308,7 +1322,13 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     });
   }, { threshold: 0.08, rootMargin: '0px 0px 40px 0px' });
 
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => revealObserver.observe(el));
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.classList.add('reveal-visible');
+    } else {
+      revealObserver.observe(el);
+    }
+  });
 
   const moonGlow = document.querySelector('.moon-glow');
   const heroSection = document.querySelector('.hero');
