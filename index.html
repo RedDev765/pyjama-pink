@@ -570,32 +570,6 @@
   .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur{
     opacity:0;
   }
-  .reveal.in-view{ animation:revealUp 1s cubic-bezier(.25,.46,.45,.94) forwards; }
-  .reveal-left.in-view{ animation:revealLeft 1s cubic-bezier(.25,.46,.45,.94) forwards; }
-  .reveal-right.in-view{ animation:revealRight 1s cubic-bezier(.25,.46,.45,.94) forwards; }
-  .reveal-scale.in-view{ animation:revealScale 1s cubic-bezier(.25,.46,.45,.94) forwards; }
-  .reveal-blur.in-view{ animation:revealBlur 1.3s cubic-bezier(.25,.46,.45,.94) forwards; }
-  @keyframes revealUp{
-    0%{ opacity:0; transform:translateY(40px); }
-    100%{ opacity:1; transform:translateY(0); }
-  }
-  @keyframes revealLeft{
-    0%{ opacity:0; transform:translateX(-50px); }
-    100%{ opacity:1; transform:translateX(0); }
-  }
-  @keyframes revealRight{
-    0%{ opacity:0; transform:translateX(50px); }
-    100%{ opacity:1; transform:translateX(0); }
-  }
-  @keyframes revealScale{
-    0%{ opacity:0; transform:scale(0.92); }
-    100%{ opacity:1; transform:scale(1); }
-  }
-  @keyframes revealBlur{
-    0%{ opacity:0; filter:blur(8px); transform:translateY(20px); }
-    100%{ opacity:1; filter:blur(0); transform:translateY(0); }
-  }
-  .grid .card.reveal{ animation-delay:var(--stagger, 0s); }
 
   /* ---------- SKIP ANIMATION FOR ELEMENTS ALREADY VISIBLE ON LOAD ---------- */
   .reveal-visible, .reveal-visible.reveal-left, .reveal-visible.reveal-right, .reveal-visible.reveal-scale, .reveal-visible.reveal-blur{
@@ -609,15 +583,6 @@
   .reveal-group > .reveal-child{
     opacity:0;
     transform:translateY(24px);
-  }
-  .reveal-group.in-view > .reveal-child:nth-child(1){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.05s forwards; }
-  .reveal-group.in-view > .reveal-child:nth-child(2){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.15s forwards; }
-  .reveal-group.in-view > .reveal-child:nth-child(3){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.25s forwards; }
-  .reveal-group.in-view > .reveal-child:nth-child(4){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.35s forwards; }
-  .reveal-group.in-view > .reveal-child:nth-child(5){ animation:revealChild 0.8s cubic-bezier(.25,.46,.45,.94) 0.45s forwards; }
-  @keyframes revealChild{
-    0%{ opacity:0; transform:translateY(24px); }
-    100%{ opacity:1; transform:translateY(0); }
   }
 
   /* ---------- HERO ENTRANCE ---------- */
@@ -1316,8 +1281,39 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
+        const el = entry.target;
+        if (el.classList.contains('reveal-group')) {
+          el.classList.add('in-view');
+          const children = el.querySelectorAll(':scope > .reveal-child');
+          children.forEach((child, i) => {
+            child.animate([
+              { opacity: 0, transform: 'translateY(24px)' },
+              { opacity: 1, transform: 'translateY(0)' }
+            ], { duration: 800, delay: 50 + i * 100, easing: 'cubic-bezier(.25,.46,.45,.94)', fill: 'forwards' });
+          });
+        } else {
+          const delay = parseFloat(el.style.getPropertyValue('--stagger')) || 0;
+          const easing = 'cubic-bezier(.25,.46,.45,.94)';
+          let keyframes, duration;
+          if (el.classList.contains('reveal-blur')) {
+            keyframes = [{ opacity: 0, filter: 'blur(8px)', transform: 'translateY(20px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }];
+            duration = 1300;
+          } else if (el.classList.contains('reveal-left')) {
+            keyframes = [{ opacity: 0, transform: 'translateX(-50px)' }, { opacity: 1, transform: 'translateX(0)' }];
+            duration = 1000;
+          } else if (el.classList.contains('reveal-right')) {
+            keyframes = [{ opacity: 0, transform: 'translateX(50px)' }, { opacity: 1, transform: 'translateX(0)' }];
+            duration = 1000;
+          } else if (el.classList.contains('reveal-scale')) {
+            keyframes = [{ opacity: 0, transform: 'scale(0.92)' }, { opacity: 1, transform: 'scale(1)' }];
+            duration = 1000;
+          } else {
+            keyframes = [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'translateY(0)' }];
+            duration = 1000;
+          }
+          el.animate(keyframes, { duration, delay, easing, fill: 'forwards' });
+        }
+        revealObserver.unobserve(el);
       }
     });
   }, { threshold: 0.08, rootMargin: '0px 0px 40px 0px' });
