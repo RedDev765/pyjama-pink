@@ -834,6 +834,16 @@
   .cart-total{ display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; margin-bottom:12px; }
   .cart-empty{ text-align:center; padding:48px 0; color:var(--ink-soft); }
   .cart-empty svg{ width:48px; height:48px; opacity:0.3; margin-bottom:12px; }
+  .cart-step{ padding:0 0 12px; }
+  .cart-step-field{ margin-bottom:10px; }
+  .cart-step-field label{ display:block; font-size:0.8rem; font-weight:600; margin-bottom:4px; color:var(--ink-soft); }
+  .cart-step-field input{
+    width:100%; padding:10px 14px; border:2px solid #E8E0EC; border-radius:10px;
+    font-size:0.9rem; background:#fff; outline:none; transition:border-color 0.2s;
+    box-sizing:border-box;
+  }
+  .cart-step-field input:focus{ border-color:var(--moon-pink); }
+  .cart-step-error{ color:#E85C8C; font-size:0.8rem; margin-top:4px; display:none; }
 
   /* ---------- TOAST ---------- */
   .toast{
@@ -1104,7 +1114,7 @@
         <li><a href="#histoire">Notre histoire</a></li>
         <li><a href="#avis">Avis</a></li>
         <li>
-          <a class="btn btn-whatsapp btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20pyjamas" target="_blank" rel="noopener">
+          <a class="btn btn-whatsapp btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20pyjamas" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.05 2h-.01zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.09-3.28-.68-2.76-.94-4.53-3.75-4.67-3.92-.13-.18-1.12-1.49-1.12-2.85s.7-2.02.95-2.3c.24-.27.53-.34.71-.34.18 0 .36 0 .51.01.17.01.38-.06.6.46.24.56.8 1.94.87 2.08.07.13.11.29.02.47-.09.18-.14.29-.27.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.15.27.68 1.12 1.46 1.81 1 .89 1.85 1.17 2.11 1.3.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.06.13.06.71-.18 1.39z"/></svg>
             Commander
           </a>
@@ -1134,7 +1144,7 @@
       <h1>Des <em>nuits douces</em>, des soirées qui vous ressemblent</h1>
       <p>Pyjama Pink habille vos soirées : des pyjamas moelleux pour se blottir, et une ligne lingerie pour se sentir belle, jour comme nuit.</p>
       <div class="hero-ctas">
-        <a class="btn btn-whatsapp" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener">
+        <a class="btn btn-whatsapp" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.05 2h-.01zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.09-3.28-.68-2.76-.94-4.53-3.75-4.67-3.92-.13-.18-1.12-1.49-1.12-2.85s.7-2.02.95-2.3c.24-.27.53-.34.71-.34.18 0 .36 0 .51.01.17.01.38-.06.6.46.24.56.8 1.94.87 2.08.07.13.11.29.02.47-.09.18-.14.29-.27.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.15.27.68 1.12 1.46 1.81 1 .89 1.85 1.17 2.11 1.3.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.06.13.06.71-.18 1.39z"/></svg>
           Commander sur WhatsApp
         </a>
@@ -1168,7 +1178,7 @@
         <div class="card-body">
           <h3>Pyjama Feuilles Corail</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Feuilles%20Corail" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Feuilles%20Corail" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1178,7 +1188,7 @@
         <div class="card-body">
           <h3>Pyjama Pêche Douceur</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Pêche%20Douceur" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Pêche%20Douceur" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1188,7 +1198,7 @@
         <div class="card-body">
           <h3>Pyjama Zébrures Bordeaux</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Zébrures%20Bordeaux" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Zébrures%20Bordeaux" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1198,7 +1208,7 @@
         <div class="card-body">
           <h3>Pyjama Papillons Mauve</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Papillons%20Mauve" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Papillons%20Mauve" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1208,7 +1218,7 @@
         <div class="card-body">
           <h3>Pyjama Cheval Ocre</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Cheval%20Ocre" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Cheval%20Ocre" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1218,7 +1228,7 @@
         <div class="card-body">
           <h3>Pyjama Nœuds Ciel</h3>
           <span class="price">149 DH</span>
-          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Nœuds%20Ciel" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-outline-dark btn-small" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Pyjama%20Nœuds%20Ciel" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
     </div>
@@ -1262,7 +1272,7 @@
         <div class="card-body">
           <h3>Ensemble Dentelle Nuit</h3>
           <span class="price">290 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Dentelle%20Nuit" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Dentelle%20Nuit" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1272,7 +1282,7 @@
         <div class="card-body">
           <h3>Nuisette Satin Élégance</h3>
           <span class="price">340 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Nuisette%20Satin%20Élégance" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Nuisette%20Satin%20Élégance" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1282,7 +1292,7 @@
         <div class="card-body">
           <h3>Ensemble Rétro Chic</h3>
           <span class="price">310 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Rétro%20Chic" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Rétro%20Chic" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1292,7 +1302,7 @@
         <div class="card-body">
           <h3>Body Dentelle Fine</h3>
           <span class="price">260 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Body%20Dentelle%20Fine" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Body%20Dentelle%20Fine" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1302,7 +1312,7 @@
         <div class="card-body">
           <h3>Ensemble Tulle Doré</h3>
           <span class="price">355 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Tulle%20Doré" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Ensemble%20Tulle%20Doré" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
       <div class="card reveal">
@@ -1312,7 +1322,7 @@
         <div class="card-body">
           <h3>Nuisette Minimaliste</h3>
           <span class="price">245 DH</span>
-          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Nuisette%20Minimaliste" target="_blank" rel="noopener">Commander</a>
+          <a class="btn btn-small" style="background:var(--gold); color:#2C1D45;" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20le%20Nuisette%20Minimaliste" target="_blank" rel="noopener">Commander</a>
         </div>
       </div>
     </div>
@@ -1435,12 +1445,24 @@
   </div>
   <div class="cart-items" id="cartItems" aria-live="polite"></div>
   <div class="cart-drawer-footer" id="cartFooter">
+    <div class="cart-step" id="cartStepInfo" style="display:none;">
+      <div class="cart-step-field">
+        <label for="cartName">Prénom & Nom</label>
+        <input type="text" id="cartName" placeholder="ex: Sarah Benali" autocomplete="name">
+      </div>
+      <div class="cart-step-field">
+        <label for="cartAddress">Adresse de livraison</label>
+        <input type="text" id="cartAddress" placeholder="ex: 12 Rue Hassan II, Casablanca" autocomplete="street-address">
+      </div>
+      <div class="cart-step-error" id="cartStepError"></div>
+    </div>
     <div class="cart-total"><span>Total</span><span id="cartTotal">0 DH</span></div>
     <button class="btn btn-whatsapp" style="width:100%;justify-content:center;" id="cartCheckout">Commander sur WhatsApp</button>
+    <button class="btn btn-outline-dark" style="width:100%;justify-content:center;display:none;" id="cartConfirmBtn">Confirmer la commande</button>
   </div>
 </div>
 
-<a class="float-wa" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+<a class="float-wa" href="https://wa.me/212622993031?text=Bonjour%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.05 2h-.01zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.09-3.28-.68-2.76-.94-4.53-3.75-4.67-3.92-.13-.18-1.12-1.49-1.12-2.85s.7-2.02.95-2.3c.24-.27.53-.34.71-.34.18 0 .36 0 .51.01.17.01.38-.06.6.46.24.56.8 1.94.87 2.08.07.13.11.29.02.47-.09.18-.14.29-.27.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.15.27.68 1.12 1.46 1.81 1 .89 1.85 1.17 2.11 1.3.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.06.13.06.71-.18 1.39z"/></svg>
 </a>
 
@@ -1731,7 +1753,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     if (!currentProduct) return;
     const qty = Math.max(1, parseInt(modalQty.value) || 1);
     const total = currentProduct.price * qty;
-    const msg = `Bonjour Hanan %F0%9F%8C%99%2C je souhaite commander :%0A%0A- ${currentProduct.name} x${qty} = ${total} DH%0A%0ATotal : ${total} DH`;
+    const msg = `Bonjour %F0%9F%8C%99 je souhaite commander :%0A%0A- ${currentProduct.name} x${qty} = ${total} DH%0A%0ATotal : ${total} DH`;
     window.open(`https://wa.me/212622993031?text=${msg}`, '_blank');
     modal.classList.remove('open');
     document.body.style.overflow = '';
@@ -1797,6 +1819,10 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     cartDrawer.classList.remove('open');
     cartOverlay.classList.remove('open');
     document.body.style.overflow = '';
+    document.getElementById('cartCheckout').style.display = 'flex';
+    document.getElementById('cartConfirmBtn').style.display = 'none';
+    document.getElementById('cartStepInfo').style.display = 'none';
+    document.getElementById('cartStepError').style.display = 'none';
   }
   document.getElementById('cartClose').addEventListener('click', closeCart);
   cartOverlay.addEventListener('click', closeCart);
@@ -1828,8 +1854,23 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
 
   document.getElementById('cartCheckout').addEventListener('click', () => {
     const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
+    if (cart.length === 0) return;
+    document.getElementById('cartCheckout').style.display = 'none';
+    document.getElementById('cartConfirmBtn').style.display = 'flex';
+    document.getElementById('cartStepInfo').style.display = '';
+    document.getElementById('cartName').focus();
+  });
+
+  document.getElementById('cartConfirmBtn').addEventListener('click', () => {
+    const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
     const products = loadProducts();
     if (cart.length === 0) return;
+    const name = document.getElementById('cartName').value.trim();
+    const address = document.getElementById('cartAddress').value.trim();
+    const errorEl = document.getElementById('cartStepError');
+    if (!name) { errorEl.textContent = 'Veuillez saisir votre prénom et nom'; errorEl.style.display = ''; document.getElementById('cartName').focus(); return; }
+    if (!address) { errorEl.textContent = 'Veuillez saisir votre adresse de livraison'; errorEl.style.display = ''; document.getElementById('cartAddress').focus(); return; }
+    errorEl.style.display = 'none';
     let lines = [], total = 0;
     cart.forEach(item => {
       const p = products.find(x => x.id === item.id);
@@ -1837,11 +1878,16 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
       lines.push(`- ${p.name} x${item.qty} = ${p.price * item.qty} DH`);
       total += p.price * item.qty;
     });
-    const msg = `Bonjour Hanan %F0%9F%8C%99%2C je souhaite commander :%0A%0A${lines.join('%0A')}%0A%0ATotal : ${total} DH%0A%0AMerci de me confirmer la disponibilit%C3%A9 et le total livraison.`;
+    const msg = `Bonjour %F0%9F%8C%99 je souhaite commander :%0A%0A${lines.join('%0A')}%0A%0ATotal : ${total} DH%0A%0ANom : ${name}%0AAdresse : ${address}%0A%0AMerci de me confirmer la disponibilit%C3%A9 et le total livraison.`;
     window.open(`https://wa.me/212622993031?text=${msg}`, '_blank');
     localStorage.removeItem('pyjamapink_cart');
     closeCart();
     updateCartUI();
+    document.getElementById('cartCheckout').style.display = 'flex';
+    document.getElementById('cartConfirmBtn').style.display = 'none';
+    document.getElementById('cartStepInfo').style.display = 'none';
+    document.getElementById('cartName').value = '';
+    document.getElementById('cartAddress').value = '';
     showToast('Commande envoyée sur WhatsApp ✓');
   });
 
