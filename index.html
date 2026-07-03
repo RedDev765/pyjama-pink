@@ -146,7 +146,7 @@
 
   nav ul{
     display:flex;
-    gap:30px;
+    gap:28px;
     align-items:center;
   }
   nav a:not(.btn){
@@ -158,8 +158,6 @@
   }
   nav a:not(.btn):hover{ opacity:1; }
 
-  .nav-links{ display:flex; gap:28px; align-items:center; }
-
   .menu-toggle{
     display:none;
     background:none;
@@ -167,6 +165,39 @@
     color:var(--cream);
     font-size:1.6rem;
     cursor:pointer;
+    padding:4px;
+    line-height:1;
+  }
+
+  @media (max-width: 900px){
+    .nav-links{
+      display:flex;
+      flex-direction:column;
+      position:absolute;
+      top:100%; left:0; right:0;
+      background:var(--night);
+      padding:0 28px;
+      gap:0;
+      overflow:hidden;
+      max-height:0;
+      transition:max-height 0.4s cubic-bezier(.25,.46,.45,.94), padding 0.3s cubic-bezier(.25,.46,.45,.94);
+    }
+    .nav-links li{ width:100%; opacity:0; transform:translateY(-8px); transition:opacity 0.35s ease, transform 0.35s ease; }
+    .nav-links li:first-child{ transition-delay:0.05s; }
+    .nav-links li:nth-child(2){ transition-delay:0.1s; }
+    .nav-links li:nth-child(3){ transition-delay:0.15s; }
+    .nav-links li:nth-child(4){ transition-delay:0.2s; }
+    .nav-links li:nth-child(5){ transition-delay:0.25s; }
+    .nav-open .nav-links{
+      max-height:400px;
+      padding:20px 28px;
+    }
+    .nav-open .nav-links li{
+      opacity:1;
+      transform:translateY(0);
+    }
+    .nav-links li a{ display:block; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .menu-toggle{ display:block; }
   }
 
   /* ---------- HERO ---------- */
@@ -445,6 +476,39 @@
   }
   .insta-btn svg{ width:18px; height:18px; }
 
+  .insta-gallery{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:32px;
+  }
+  .insta-post{
+    aspect-ratio:1;
+    border-radius:14px;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+  }
+  .insta-post img{
+    width:100%; height:100%;
+    object-fit:cover;
+    transition:transform 0.6s cubic-bezier(.25,.46,.45,.94), filter 0.4s ease;
+  }
+  .insta-post:hover img{ transform:scale(1.06); filter:brightness(0.85); }
+  .insta-post-overlay{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    gap:20px;
+    opacity:0;
+    transition:opacity 0.3s ease;
+    color:#fff;
+    font-weight:600;
+    font-size:0.9rem;
+  }
+  .insta-post:hover .insta-post-overlay{ opacity:1; }
+  .insta-post-overlay span{ display:flex; align-items:center; gap:6px; }
+  .insta-post-overlay svg{ width:18px; height:18px; }
+
   /* ---------- FOOTER ---------- */
   footer{
     background:var(--night-deep);
@@ -619,13 +683,44 @@
     .grid{ grid-template-columns:repeat(2,1fr); }
     .reviews{ grid-template-columns:1fr; }
     .footer-grid{ grid-template-columns:1fr; gap:32px; }
-    .nav-links{ display:none; }
-    .menu-toggle{ display:block; }
   }
   @media (max-width: 560px){
     .grid{ grid-template-columns:1fr; }
     .insta-callout{ padding:40px 28px; flex-direction:column; align-items:flex-start; }
+    .insta-gallery{ grid-template-columns:repeat(3,1fr); gap:8px; }
     .section{ padding:76px 0; }
+    .hero h1{ font-size:clamp(1.8rem,6vw,2.8rem); }
+    .hero p{ font-size:1rem; }
+    .card-body{ padding:16px 18px 20px; }
+    .card-body h3{ font-size:1rem; }
+  }
+  @media (max-width: 480px){
+    .hero-inner{ gap:32px; }
+    .section{ padding:56px 0; }
+    .section-header{ max-width:100%; }
+    .grid{ gap:16px; }
+    .card-body{ padding:14px 14px 18px; }
+    .card-body h3{ font-size:0.95rem; }
+    .btn{ font-size:0.82rem; padding:10px 18px; }
+    .btn-small{ font-size:0.78rem; padding:8px 16px; }
+    .brand-name{ font-size:1rem; }
+    .brand img{ width:36px; height:36px; }
+    .nav-inner{ padding:10px 16px; }
+    .section-header h2{ font-size:clamp(1.3rem,4.5vw,1.7rem); }
+    .hero h1{ font-size:clamp(1.5rem,7vw,2.2rem); margin:12px 0 16px; }
+    .hero p{ font-size:0.92rem; margin-bottom:24px; }
+    .hero-ctas{ gap:10px; }
+    .story{ gap:32px; }
+    .story-photo{ min-height:240px; }
+    .footer-grid{ gap:24px; }
+    .review{ padding:22px; }
+    .insta-callout{ padding:28px 20px; }
+    .insta-gallery{ grid-template-columns:repeat(2,1fr); gap:6px; }
+    .collection-switch{ gap:8px; }
+    .switch-pill{ font-size:0.82rem; padding:8px 16px; }
+  }
+  @media (max-width: 380px){
+    .insta-gallery{ grid-template-columns:1fr; }
   }
 
   /* ---------- CREATIVE ANIMATIONS ---------- */
@@ -1150,12 +1245,39 @@
   <div class="wrap">
     <div class="insta-callout reveal-scale">
       <div>
-        <h2>Suivez Pyjama Pink sur Instagram</h2>
-        <p>Nouveautés, coulisses et promos en avant-première sur @hanane.pink.</p>
+        <p class="eyebrow" style="color:var(--moon-pink);">Instagram</p>
+        <h2>Suivez Pyjama Pink <br>sur Instagram</h2>
+        <p>Nouveautés, coulisses et promos en avant-première.</p>
       </div>
       <a class="insta-btn" href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 0 1 1.77 1.15 4.9 4.9 0 0 1 1.15 1.77c.16.46.35 1.26.4 2.43.07 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.46.16-1.26.35-2.43.4-1.25.07-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.24-1.97.4-2.43a4.9 4.9 0 0 1 1.15-1.77A4.9 4.9 0 0 1 5.59 1.8c.46-.16 1.26-.35 2.43-.4C9.27 1.33 9.67 1.33 12 1.33zM12 6.87A5.13 5.13 0 1 0 12 17.13 5.13 5.13 0 0 0 12 6.87zm0 8.46a3.33 3.33 0 1 1 0-6.66 3.33 3.33 0 0 1 0 6.66zm5.34-8.66a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
         @hanane.pink
+      </a>
+    </div>
+    <div class="insta-gallery reveal-group">
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1745308451484-3cdbd2d390dd?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>1 245</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>89</span></div>
+      </a>
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1731440862944-787163a61da8?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>2 341</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>156</span></div>
+      </a>
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1731440854783-fb78df735dcc?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>978</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>67</span></div>
+      </a>
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1731440854610-3d7118b95346?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>3 012</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>203</span></div>
+      </a>
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1731430406702-c0e4a86b84fb?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>654</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>45</span></div>
+      </a>
+      <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
+        <img src="https://images.unsplash.com/photo-1720084505889-3768b8421500?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>4 521</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>312</span></div>
       </a>
     </div>
   </div>
@@ -1377,37 +1499,15 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   if (lingerieSection) spyObserver.observe(lingerieSection);
 
   const menuToggle = document.querySelector('.menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  function closeMenu() {
-    navLinks.style.display = 'none';
-  }
+  const headerEl = document.querySelector('header');
   menuToggle.addEventListener('click', () => {
-    const open = navLinks.style.display === 'flex';
-    navLinks.style.display = open ? 'none' : 'flex';
-    navLinks.style.flexDirection = 'column';
-    navLinks.style.position = 'absolute';
-    navLinks.style.top = '100%';
-    navLinks.style.left = '0';
-    navLinks.style.right = '0';
-    navLinks.style.background = '#362350';
-    navLinks.style.padding = '20px 28px';
-    navLinks.style.gap = '18px';
+    headerEl.classList.toggle('nav-open');
   });
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', closeMenu);
+  headerEl.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => headerEl.classList.remove('nav-open'));
   });
   window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      navLinks.style.display = '';
-      navLinks.style.flexDirection = '';
-      navLinks.style.position = '';
-      navLinks.style.top = '';
-      navLinks.style.left = '';
-      navLinks.style.right = '';
-      navLinks.style.background = '';
-      navLinks.style.padding = '';
-      navLinks.style.gap = '';
-    }
+    if (window.innerWidth > 900) headerEl.classList.remove('nav-open');
   });
 
   document.querySelectorAll('.switch-pill').forEach(pill => {
