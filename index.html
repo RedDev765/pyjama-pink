@@ -797,6 +797,98 @@
   .story:hover .story-photo {
     transform: scale(1.015);
   }
+
+  /* ---------- FLOATING ORBS ---------- */
+  .orb{
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+    filter:blur(60px);
+    opacity:0.25;
+    animation:orbFloat 12s ease-in-out infinite;
+  }
+  .orb-1{ width:300px; height:300px; background:var(--moon-pink); top:-80px; right:-60px; animation-delay:0s; }
+  .orb-2{ width:200px; height:200px; background:var(--lavender); bottom:40px; left:-40px; animation-delay:-4s; }
+  .orb-3{ width:180px; height:180px; background:var(--gold); top:50%; right:20%; animation-delay:-8s; opacity:0.12; }
+  .section-dark .orb{ background:var(--moon-pink); }
+  .section-dark .orb-2{ background:var(--lavender); }
+  .section-dark .orb-3{ background:var(--gold); opacity:0.1; }
+  @keyframes orbFloat{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    25%{ transform:translate(12px,-18px) scale(1.05); }
+    50%{ transform:translate(-8px,10px) scale(0.95); }
+    75%{ transform:translate(20px,14px) scale(1.02); }
+  }
+
+  /* ---------- BLUR REVEAL ---------- */
+  .reveal-blur{
+    opacity:0;
+    filter:blur(6px);
+    transform:translateY(20px);
+    transition:opacity 0.9s cubic-bezier(.25,.46,.45,.94), filter 0.9s cubic-bezier(.25,.46,.45,.94), transform 0.9s cubic-bezier(.25,.46,.45,.94);
+  }
+  .reveal-blur.in-view{ opacity:1; filter:blur(0); transform:translateY(0); }
+
+  /* ---------- CARD 3D HOVER ---------- */
+  .card{ perspective:800px; }
+  .card-inner{
+    transform-style:preserve-3d;
+    transition:transform 0.5s cubic-bezier(.25,.46,.45,.94);
+  }
+
+  /* ---------- HERO GRADIENT ANIM ---------- */
+  .hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(ellipse 100% 70% at 30% 20%, rgba(240,168,198,0.08) 0%, transparent 60%);
+    animation:heroGlow 8s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  @keyframes heroGlow{
+    0%{ opacity:0.4; transform:scale(1); }
+    100%{ opacity:1; transform:scale(1.08); }
+  }
+
+  /* ---------- REVIEW STAR WIGGLE ---------- */
+  .review:hover .stars-row{ animation:starWiggle 0.5s ease; }
+  @keyframes starWiggle{
+    0%,100%{ transform:scale(1) rotate(0deg); }
+    25%{ transform:scale(1.12) rotate(-2deg); }
+    50%{ transform:scale(1.08) rotate(0deg); }
+    75%{ transform:scale(1.12) rotate(2deg); }
+  }
+
+  /* ---------- NAV ACTIVE DOT ---------- */
+  nav a:not(.btn).active-nav{ opacity:1 !important; }
+  nav a:not(.btn).active-nav::after{ width:100%; left:0; }
+
+  /* ---------- DIVIDER WAVE ANIM ---------- */
+  .collection-divider svg{
+    animation:dividerPulse 6s ease-in-out infinite alternate;
+  }
+  @keyframes dividerPulse{
+    0%{ transform:scaleY(1); opacity:0.8; }
+    100%{ transform:scaleY(1.06); opacity:1; }
+  }
+
+  /* ---------- STORY DECO ---------- */
+  .story-deco{
+    position:absolute;
+    width:80px; height:80px;
+    border:2px solid var(--moon-pink-soft);
+    border-radius:50%;
+    opacity:0.15;
+    pointer-events:none;
+  }
+  .story-deco-1{ top:-20px; right:-20px; animation:orbFloat 10s ease-in-out infinite; }
+  .story-deco-2{ bottom:-30px; left:-20px; width:50px; height:50px; animation:orbFloat 14s ease-in-out infinite reverse; }
+
+  /* ---------- RESPONSIVE TWEAKS ---------- */
+  @media (max-width: 768px){
+    .orb{ display:none; }
+    .story-deco{ display:none; }
+  }
 </style>
 </head>
 <body>
@@ -826,6 +918,8 @@
 </header>
 
 <section class="hero" id="top">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
   <div class="stars">
     <div class="star" style="width:3px;height:3px;top:15%;left:10%;animation-delay:0s;"></div>
     <div class="star" style="width:2px;height:2px;top:25%;left:80%;animation-delay:0.6s;"></div>
@@ -950,6 +1044,8 @@
 </div>
 
 <section class="section section-dark" id="lingerie" style="padding-top:70px;">
+  <div class="orb orb-1" style="width:250px;height:250px;top:-60px;right:-40px;"></div>
+  <div class="orb orb-3" style="width:150px;height:150px;bottom:20%;left:10%;"></div>
   <div class="wrap">
     <div class="section-header reveal-group">
       <p class="eyebrow reveal-child" style="color:var(--gold);">Collection Lingerie</p>
@@ -1027,7 +1123,9 @@
 
 <section class="section section-light" id="histoire">
   <div class="wrap">
-    <div class="story">
+    <div class="story" style="position:relative;">
+      <div class="story-deco story-deco-1"></div>
+      <div class="story-deco story-deco-2"></div>
       <div class="story-photo reveal-left">
         <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=700&h=700&fit=crop" loading="lazy" alt="Notre atelier">
         <div class="story-photo-tint"></div>
@@ -1044,6 +1142,7 @@
 </section>
 
 <section class="section section-dark" id="avis">
+  <div class="orb orb-2" style="width:200px;height:200px;bottom:-40px;left:-40px;"></div>
   <div class="wrap">
     <div class="section-header reveal-group">
       <p class="eyebrow reveal-child" style="color:var(--moon-pink-soft);">Avis clientes</p>
@@ -1188,8 +1287,8 @@
       `).join('');
     }
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-group').forEach(el => revealObserver.observe(el));
-    document.querySelectorAll('.grid').forEach(grid => {
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => revealObserver.observe(el));
+     document.querySelectorAll('.grid').forEach(grid => {
       grid.querySelectorAll('.card').forEach((card, i) => {
         card.style.setProperty('--stagger', (i % 3) * 0.12 + 's');
       });
@@ -1205,7 +1304,7 @@
     });
   }, { threshold: 0.08, rootMargin: '0px 0px 40px 0px' });
 
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-group').forEach(el => revealObserver.observe(el));
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-group').forEach(el => revealObserver.observe(el));
 
   const moonGlow = document.querySelector('.moon-glow');
   const heroSection = document.querySelector('.hero');
@@ -1273,6 +1372,27 @@
       navLinks.style.gap = '';
     }
   });
+
+  document.querySelectorAll('.switch-pill').forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      const target = document.querySelector(pill.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  const navAnchors = document.querySelectorAll('nav a[href^="#"]:not(.btn)');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navAnchors.forEach(a => {
+        a.classList.toggle('active-nav', a.getAttribute('href') === '#' + entry.target.id);
+      });
+    });
+  }, { threshold: 0.3, rootMargin: '0px 0px -100px 0px' });
+  document.querySelectorAll('section[id], footer[id]').forEach(el => sectionObserver.observe(el));
 
   renderDynamicProducts();
 </script>
