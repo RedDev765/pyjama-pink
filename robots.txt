@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pyjama-pink.pages.dev/sitemap.xml
