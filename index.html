@@ -1278,43 +1278,60 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     });
   }
 
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+
+      function show(el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.filter = 'none';
+      }
+
+      if (reducedMotion) {
+        show(el);
         if (el.classList.contains('reveal-group')) {
-          el.classList.add('in-view');
-          const children = el.querySelectorAll(':scope > .reveal-child');
-          children.forEach((child, i) => {
-            child.animate([
-              { opacity: 0, transform: 'translateY(24px)' },
-              { opacity: 1, transform: 'translateY(0)' }
-            ], { duration: 800, delay: 50 + i * 100, easing: 'cubic-bezier(.25,.46,.45,.94)', fill: 'forwards' });
-          });
-        } else {
-          const delay = parseFloat(el.style.getPropertyValue('--stagger')) || 0;
-          const easing = 'cubic-bezier(.25,.46,.45,.94)';
-          let keyframes, duration;
-          if (el.classList.contains('reveal-blur')) {
-            keyframes = [{ opacity: 0, filter: 'blur(8px)', transform: 'translateY(20px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }];
-            duration = 1300;
-          } else if (el.classList.contains('reveal-left')) {
-            keyframes = [{ opacity: 0, transform: 'translateX(-50px)' }, { opacity: 1, transform: 'translateX(0)' }];
-            duration = 1000;
-          } else if (el.classList.contains('reveal-right')) {
-            keyframes = [{ opacity: 0, transform: 'translateX(50px)' }, { opacity: 1, transform: 'translateX(0)' }];
-            duration = 1000;
-          } else if (el.classList.contains('reveal-scale')) {
-            keyframes = [{ opacity: 0, transform: 'scale(0.92)' }, { opacity: 1, transform: 'scale(1)' }];
-            duration = 1000;
-          } else {
-            keyframes = [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'translateY(0)' }];
-            duration = 1000;
-          }
-          el.animate(keyframes, { duration, delay, easing, fill: 'forwards' });
+          el.querySelectorAll(':scope > .reveal-child').forEach(show);
         }
         revealObserver.unobserve(el);
+        return;
       }
+
+      if (el.classList.contains('reveal-group')) {
+        el.classList.add('in-view');
+        const children = el.querySelectorAll(':scope > .reveal-child');
+        children.forEach((child, i) => {
+          child.animate([
+            { opacity: 0, transform: 'translateY(24px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], { duration: 800, delay: 50 + i * 100, easing: 'cubic-bezier(.25,.46,.45,.94)', fill: 'forwards' });
+        });
+      } else {
+        const delay = parseFloat(el.style.getPropertyValue('--stagger')) || 0;
+        const easing = 'cubic-bezier(.25,.46,.45,.94)';
+        let keyframes, duration;
+        if (el.classList.contains('reveal-blur')) {
+          keyframes = [{ opacity: 0, filter: 'blur(8px)', transform: 'translateY(20px)' }, { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }];
+          duration = 1300;
+        } else if (el.classList.contains('reveal-left')) {
+          keyframes = [{ opacity: 0, transform: 'translateX(-50px)' }, { opacity: 1, transform: 'translateX(0)' }];
+          duration = 1000;
+        } else if (el.classList.contains('reveal-right')) {
+          keyframes = [{ opacity: 0, transform: 'translateX(50px)' }, { opacity: 1, transform: 'translateX(0)' }];
+          duration = 1000;
+        } else if (el.classList.contains('reveal-scale')) {
+          keyframes = [{ opacity: 0, transform: 'scale(0.92)' }, { opacity: 1, transform: 'scale(1)' }];
+          duration = 1000;
+        } else {
+          keyframes = [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'translateY(0)' }];
+          duration = 1000;
+        }
+        el.animate(keyframes, { duration, delay, easing, fill: 'forwards' });
+      }
+      revealObserver.unobserve(el);
     });
   }, { threshold: 0.08, rootMargin: '0px 0px 40px 0px' });
 
