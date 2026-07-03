@@ -836,20 +836,9 @@
   }
 
   /* ---------- BLUR REVEAL ---------- */
-  .reveal-blur{
-    opacity:0;
-    filter:blur(6px);
-    transform:translateY(20px);
-    transition:opacity 0.9s cubic-bezier(.25,.46,.45,.94), filter 0.9s cubic-bezier(.25,.46,.45,.94), transform 0.9s cubic-bezier(.25,.46,.45,.94);
-  }
-  .reveal-blur.in-view{ opacity:1; filter:blur(0); transform:translateY(0); }
 
   /* ---------- CARD 3D HOVER ---------- */
   .card{ perspective:800px; }
-  .card-inner{
-    transform-style:preserve-3d;
-    transition:transform 0.5s cubic-bezier(.25,.46,.45,.94);
-  }
 
   /* ---------- HERO GRADIENT ANIM ---------- */
   .hero::before{
