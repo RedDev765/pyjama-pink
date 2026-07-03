@@ -729,15 +729,22 @@
   /* ---------- CART TOGGLE ---------- */
   .cart-toggle{
     background:none; border:none; color:var(--cream); cursor:pointer;
-    position:relative; padding:4px; margin-left:10px;
+    position:relative; padding:6px; display:flex; align-items:center;
   }
-  .cart-toggle svg{ width:24px; height:24px; display:block; }
+  .cart-toggle svg{ width:22px; height:22px; display:block; }
   .cart-count{
-    position:absolute; top:-4px; right:-6px;
+    position:absolute; top:0; right:0;
     background:var(--moon-pink); color:var(--night-deep);
-    font-size:0.65rem; font-weight:800;
-    width:18px; height:18px; border-radius:50%;
+    font-size:0.6rem; font-weight:800;
+    width:16px; height:16px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
+  }
+  .nav-cart-li{ display:flex; align-items:center; }
+  @media (max-width: 900px){
+    .nav-cart-li{ width:100%; }
+    .nav-cart-li .cart-toggle{ width:100%; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.06); justify-content:flex-start; gap:10px; color:var(--cream); font-size:0.9rem; font-weight:600; }
+    .nav-cart-li .cart-toggle::before{ content:'Panier'; }
+    .nav-cart-li .cart-count{ position:static; }
   }
 
   /* ---------- PRODUCT MODAL ---------- */
@@ -848,6 +855,22 @@
   .confirm-box .total{ font-size:1.3rem; font-weight:700; color:var(--moon-pink); margin:12px 0; }
   .confirm-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; justify-content:center; }
   .confirm-actions .btn{ min-width:140px; justify-content:center; }
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+    z-index:200;
+    background:var(--night-deep); color:var(--cream);
+    padding:14px 28px; border-radius:14px;
+    font-weight:600; font-size:0.9rem;
+    display:flex; align-items:center; gap:10px;
+    opacity:0;
+    transition:opacity 0.35s ease, transform 0.35s cubic-bezier(.25,.46,.45,.94);
+    pointer-events:none;
+    box-shadow:0 8px 24px rgba(36,22,56,0.3);
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast svg{ width:20px; height:20px; flex-shrink:0; }
   .card:hover .card-photo img {
     transform: scale(1.04);
   }
@@ -1107,12 +1130,14 @@
             Commander
           </a>
         </li>
+        <li class="nav-cart-li">
+          <button class="cart-toggle" aria-label="Panier" id="cartToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="cart-count">0</span>
+          </button>
+        </li>
       </ul>
       <button class="menu-toggle" aria-label="Menu">☰</button>
-      <button class="cart-toggle" aria-label="Panier" id="cartToggle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span class="cart-count">0</span>
-      </button>
     </nav>
   </div>
 </header>
@@ -1384,27 +1409,27 @@
     </div>
     <div class="insta-gallery reveal-group">
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1745308451484-3cdbd2d390dd?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1770294758981-484ef12c1815?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>1 245</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>89</span></div>
       </a>
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1731440862944-787163a61da8?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1766056278948-dbb10f6d82bf?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>2 341</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>156</span></div>
       </a>
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1731440854783-fb78df735dcc?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1766056278825-55168658f120?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>978</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>67</span></div>
       </a>
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1731440854610-3d7118b95346?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1768696082668-411638a55476?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>3 012</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>203</span></div>
       </a>
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1731430406702-c0e4a86b84fb?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1767785829300-28722d89e696?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>654</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>45</span></div>
       </a>
       <a href="https://www.instagram.com/hanane.pink/" target="_blank" rel="noopener" class="insta-post reveal-child">
-        <img src="https://images.unsplash.com/photo-1720084505889-3768b8421500?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
+        <img src="https://images.unsplash.com/photo-1770294760762-1cd821ecc567?w=300&h=300&fit=crop&crop=center" loading="lazy" alt="Instagram post">
         <div class="insta-post-overlay"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm8-7H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 7.5V9a1 1 0 0 1 1-1h.01a1 1 0 0 1 1 1v.5a1 1 0 0 1-1 1H18a1 1 0 0 1-1-1z"/></svg>4 521</span><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6v2a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3zM10 6v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h1a3 3 0 0 1 3 3z"/></svg>312</span></div>
       </a>
     </div>
@@ -1484,6 +1509,11 @@
 <a class="float-wa" href="https://wa.me/212622993031?text=Bonjour%20Hanan%20%F0%9F%8C%99%2C%20je%20suis%20int%C3%A9ress%C3%A9e%20par%20vos%20produits" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
   <svg viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.79.47 3.47 1.29 4.93L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.51 2 12.05 2h-.01zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.09-3.28-.68-2.76-.94-4.53-3.75-4.67-3.92-.13-.18-1.12-1.49-1.12-2.85s.7-2.02.95-2.3c.24-.27.53-.34.71-.34.18 0 .36 0 .51.01.17.01.38-.06.6.46.24.56.8 1.94.87 2.08.07.13.11.29.02.47-.09.18-.14.29-.27.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.15.27.68 1.12 1.46 1.81 1 .89 1.85 1.17 2.11 1.3.27.13.42.11.58-.07.16-.18.67-.78.85-1.05.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.27.13.44.2.51.31.06.13.06.71-.18 1.39z"/></svg>
 </a>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="var(--moon-pink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+  <span id="toastMsg">Ajouté au panier</span>
+</div>
 
 <script>
   const STORAGE_KEY = 'pyjamapink_products';
@@ -1752,6 +1782,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     if (existing) { existing.qty += qty; } else { cart.push({ id: currentProduct.id, qty }); }
     localStorage.setItem('pyjamapink_cart', JSON.stringify(cart));
     updateCartUI();
+    showToast(currentProduct.name + ' ajouté au panier');
     modal.classList.remove('open');
     document.body.style.overflow = '';
   });
@@ -1870,6 +1901,14 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   });
 
   /* ---------- ADD TO CART FROM GRID ---------- */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-cart-btn');
     if (!btn) return;
@@ -1883,8 +1922,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     if (existing) { existing.qty++; } else { cart.push({ id, qty: 1 }); }
     localStorage.setItem('pyjamapink_cart', JSON.stringify(cart));
     updateCartUI();
-    btn.textContent = '✓ Ajouté';
-    setTimeout(() => { btn.textContent = 'Ajouter'; }, 1200);
+    showToast(p.name + ' ajouté au panier');
   });
 
   updateCartUI();
