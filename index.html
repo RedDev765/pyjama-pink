@@ -834,16 +834,35 @@
   .cart-total{ display:flex; justify-content:space-between; font-weight:700; font-size:1.05rem; margin-bottom:12px; }
   .cart-empty{ text-align:center; padding:48px 0; color:var(--ink-soft); }
   .cart-empty svg{ width:48px; height:48px; opacity:0.3; margin-bottom:12px; }
-  .cart-step{ padding:0 0 12px; }
-  .cart-step-field{ margin-bottom:10px; }
-  .cart-step-field label{ display:block; font-size:0.8rem; font-weight:600; margin-bottom:4px; color:var(--ink-soft); }
-  .cart-step-field input{
-    width:100%; padding:10px 14px; border:2px solid #E8E0EC; border-radius:10px;
-    font-size:0.9rem; background:#fff; outline:none; transition:border-color 0.2s;
+
+  /* ---------- CHECKOUT MODAL ---------- */
+  .checkout-overlay{
+    position:fixed; inset:0; z-index:101;
+    background:rgba(36,22,56,0.7); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; padding:24px;
+  }
+  .checkout-overlay.open{ display:flex; }
+  .checkout-box{
+    background:var(--cream-card); border-radius:var(--radius);
+    max-width:420px; width:100%; padding:32px;
+    position:relative;
+    animation:modalIn 0.4s cubic-bezier(.25,.46,.45,.94) forwards;
+  }
+  .checkout-close{
+    position:absolute; top:16px; right:16px;
+    background:none; border:none; cursor:pointer;
+    font-size:1.4rem; color:var(--ink-soft); line-height:1; padding:6px;
+  }
+  .checkout-box h3{ font-family:'Fraunces',serif; font-size:1.3rem; margin-bottom:4px; }
+  .checkout-field{ margin-bottom:14px; }
+  .checkout-field label{ display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px; color:var(--ink); }
+  .checkout-field input{
+    width:100%; padding:12px 14px; border:2px solid #E8E0EC; border-radius:10px;
+    font-size:0.95rem; background:#fff; outline:none; transition:border-color 0.2s;
     box-sizing:border-box;
   }
-  .cart-step-field input:focus{ border-color:var(--moon-pink); }
-  .cart-step-error{ color:#E85C8C; font-size:0.8rem; margin-top:4px; display:none; }
+  .checkout-field input:focus{ border-color:var(--moon-pink); }
+  .checkout-error{ color:#E85C8C; font-size:0.85rem; margin-top:6px; display:none; }
 
   /* ---------- TOAST ---------- */
   .toast{
@@ -1445,20 +1464,26 @@
   </div>
   <div class="cart-items" id="cartItems" aria-live="polite"></div>
   <div class="cart-drawer-footer" id="cartFooter">
-    <div class="cart-step" id="cartStepInfo" style="display:none;">
-      <div class="cart-step-field">
-        <label for="cartName">Prénom & Nom</label>
-        <input type="text" id="cartName" placeholder="ex: Sarah Benali" autocomplete="name">
-      </div>
-      <div class="cart-step-field">
-        <label for="cartAddress">Adresse de livraison</label>
-        <input type="text" id="cartAddress" placeholder="ex: 12 Rue Hassan II, Casablanca" autocomplete="street-address">
-      </div>
-      <div class="cart-step-error" id="cartStepError"></div>
-    </div>
     <div class="cart-total"><span>Total</span><span id="cartTotal">0 DH</span></div>
     <button class="btn btn-whatsapp" style="width:100%;justify-content:center;" id="cartCheckout">Commander sur WhatsApp</button>
-    <button class="btn btn-outline-dark" style="width:100%;justify-content:center;display:none;" id="cartConfirmBtn">Confirmer la commande</button>
+  </div>
+</div>
+
+<div class="checkout-overlay" id="checkoutOverlay" role="dialog" aria-modal="true" aria-label="Vos informations">
+  <div class="checkout-box">
+    <button class="checkout-close" id="checkoutClose" aria-label="Fermer">✕</button>
+    <h3>Finaliser la commande</h3>
+    <p style="font-size:0.9rem;color:var(--ink-soft);margin-bottom:20px;">Entrez vos informations pour la livraison.</p>
+    <div class="checkout-field">
+      <label for="checkoutName">Prénom & Nom</label>
+      <input type="text" id="checkoutName" placeholder="ex: Sarah Benali" autocomplete="name">
+    </div>
+    <div class="checkout-field">
+      <label for="checkoutAddress">Adresse de livraison</label>
+      <input type="text" id="checkoutAddress" placeholder="ex: 12 Rue Hassan II, Casablanca" autocomplete="street-address">
+    </div>
+    <div class="checkout-error" id="checkoutError"></div>
+    <button class="btn btn-whatsapp" style="width:100%;justify-content:center;margin-top:20px;" id="checkoutConfirm">Confirmer la commande</button>
   </div>
 </div>
 
@@ -1470,7 +1495,7 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
   <span class="float-cart-count" id="cartCountFloat">0</span>
 </button>
-<span class="float-cart-label">Panier</span>
+<span class="float-cart-label">Mon panier</span>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
   <svg viewBox="0 0 24 24" fill="none" stroke="var(--moon-pink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -1778,7 +1803,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
 
     if (!cartItems) return;
     if (cart.length === 0) {
-      cartItems.innerHTML = '<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p style="font-weight:600;margin-bottom:6px;">Votre panier est vide</p><p style="font-size:0.85rem;">Parcourez nos collections et cliquez sur "Ajouter au panier" pour commencer.</p></div>';
+      cartItems.innerHTML = '<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p style="font-weight:600;margin-bottom:6px;">Votre panier est vide</p><p style="font-size:0.85rem;">Choisissez vos articles et cliquez sur "Ajouter au panier".</p></div>';
       cartTotal.textContent = '0 DH';
       document.getElementById('cartFooter').style.display = 'none';
       return;
@@ -1819,10 +1844,6 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     cartDrawer.classList.remove('open');
     cartOverlay.classList.remove('open');
     document.body.style.overflow = '';
-    document.getElementById('cartCheckout').style.display = 'flex';
-    document.getElementById('cartConfirmBtn').style.display = 'none';
-    document.getElementById('cartStepInfo').style.display = 'none';
-    document.getElementById('cartStepError').style.display = 'none';
   }
   document.getElementById('cartClose').addEventListener('click', closeCart);
   cartOverlay.addEventListener('click', closeCart);
@@ -1831,6 +1852,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     if (e.key === 'Escape') {
       if (cartDrawer.classList.contains('open')) closeCart();
       if (modal.classList.contains('open')) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+      if (document.getElementById('checkoutOverlay').classList.contains('open')) document.getElementById('checkoutOverlay').classList.remove('open');
     }
   });
 
@@ -1855,21 +1877,22 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   document.getElementById('cartCheckout').addEventListener('click', () => {
     const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
     if (cart.length === 0) return;
-    document.getElementById('cartCheckout').style.display = 'none';
-    document.getElementById('cartConfirmBtn').style.display = 'flex';
-    document.getElementById('cartStepInfo').style.display = '';
-    document.getElementById('cartName').focus();
+    document.getElementById('checkoutOverlay').classList.add('open');
+    document.getElementById('checkoutName').value = '';
+    document.getElementById('checkoutAddress').value = '';
+    document.getElementById('checkoutError').style.display = 'none';
+    setTimeout(() => document.getElementById('checkoutName').focus(), 300);
   });
 
-  document.getElementById('cartConfirmBtn').addEventListener('click', () => {
+  document.getElementById('checkoutConfirm').addEventListener('click', () => {
     const cart = JSON.parse(localStorage.getItem('pyjamapink_cart') || '[]');
     const products = loadProducts();
     if (cart.length === 0) return;
-    const name = document.getElementById('cartName').value.trim();
-    const address = document.getElementById('cartAddress').value.trim();
-    const errorEl = document.getElementById('cartStepError');
-    if (!name) { errorEl.textContent = 'Veuillez saisir votre prénom et nom'; errorEl.style.display = ''; document.getElementById('cartName').focus(); return; }
-    if (!address) { errorEl.textContent = 'Veuillez saisir votre adresse de livraison'; errorEl.style.display = ''; document.getElementById('cartAddress').focus(); return; }
+    const name = document.getElementById('checkoutName').value.trim();
+    const address = document.getElementById('checkoutAddress').value.trim();
+    const errorEl = document.getElementById('checkoutError');
+    if (!name) { errorEl.textContent = 'Veuillez saisir votre prénom et nom'; errorEl.style.display = ''; document.getElementById('checkoutName').focus(); return; }
+    if (!address) { errorEl.textContent = 'Veuillez saisir votre adresse de livraison'; errorEl.style.display = ''; document.getElementById('checkoutAddress').focus(); return; }
     errorEl.style.display = 'none';
     let lines = [], total = 0;
     cart.forEach(item => {
@@ -1881,14 +1904,17 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
     const msg = `Bonjour %F0%9F%8C%99 je souhaite commander :%0A%0A${lines.join('%0A')}%0A%0ATotal : ${total} DH%0A%0ANom : ${name}%0AAdresse : ${address}%0A%0AMerci de me confirmer la disponibilit%C3%A9 et le total livraison.`;
     window.open(`https://wa.me/212622993031?text=${msg}`, '_blank');
     localStorage.removeItem('pyjamapink_cart');
+    document.getElementById('checkoutOverlay').classList.remove('open');
     closeCart();
     updateCartUI();
-    document.getElementById('cartCheckout').style.display = 'flex';
-    document.getElementById('cartConfirmBtn').style.display = 'none';
-    document.getElementById('cartStepInfo').style.display = 'none';
-    document.getElementById('cartName').value = '';
-    document.getElementById('cartAddress').value = '';
     showToast('Commande envoyée sur WhatsApp ✓');
+  });
+
+  document.getElementById('checkoutClose').addEventListener('click', () => {
+    document.getElementById('checkoutOverlay').classList.remove('open');
+  });
+  document.getElementById('checkoutOverlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('checkoutOverlay')) document.getElementById('checkoutOverlay').classList.remove('open');
   });
 
   /* ---------- ADD TO CART FROM GRID ---------- */
