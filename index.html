@@ -1774,12 +1774,14 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
   }, { threshold: 0.3, rootMargin: '0px 0px -100px 0px' });
   document.querySelectorAll('section[id], footer[id]').forEach(el => sectionObserver.observe(el));
 
-  // Charge les produits depuis l'API, sinon utilise le cache local
-  (async function initProducts() {
-    const apiData = await loadFromApi();
-    renderDynamicProducts();
-    if (apiData) renderDynamicProducts();
-  })();
+  // Affiche les produits immédiatement depuis le cache, puis met à jour via l'API
+  renderDynamicProducts();
+  loadFromApi().then(apiData => {
+    if (apiData) {
+      document.querySelectorAll('.grid').forEach(g => g.innerHTML = '');
+      renderDynamicProducts();
+    }
+  });
 
   /* ---------- PRODUCT MODAL ---------- */
   const modal = document.getElementById('productModal');
