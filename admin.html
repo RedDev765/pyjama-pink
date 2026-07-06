@@ -513,18 +513,6 @@ async function loadFromApi() {
   }
 }
 
-async function syncToApi(list) {
-  try {
-    await fetch(API_BASE + '/api/products/reorder', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(list)
-    });
-  } catch (e) {
-    // Échec silencieux — les données restent dans localStorage
-  }
-}
-
 function loadProducts() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -533,9 +521,19 @@ function loadProducts() {
   } catch (e) { return []; }
 }
 
-function saveProducts(list) {
+async function saveProducts(list) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
-  syncToApi(list); // fire and forget
+  try {
+    const res = await fetch(API_BASE + '/api/products/reorder', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(list)
+    });
+    if (!res.ok) throw new Error();
+    showToast('Sync vers site réussi ✓');
+  } catch (e) {
+    showToast('Erreur sync — données sauvegardées localement');
+  }
 }
 
 let products = loadProducts();
