@@ -1,1 +1,0 @@
-export async function onRequest(context) { return new Response("hello from pages functions", { headers: { "Access-Control-Allow-Origin": "*" } }); }
