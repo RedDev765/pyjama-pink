@@ -1594,8 +1594,8 @@
     const pyjamaGrid = document.querySelector('.grid:not(.lingerie)');
     const lingerieGrid = document.querySelector('.grid.lingerie');
 
-    const pyjamas = products.filter(p => p.category === 'pyjama');
-    const lingeries = products.filter(p => p.category === 'lingerie');
+    const pyjamas = products.filter(p => p.category === 'pyjama' && p.stock > 0);
+    const lingeries = products.filter(p => p.category === 'lingerie' && p.stock > 0);
 
     if (pyjamaGrid) {
       pyjamaGrid.innerHTML = pyjamas.map(p => `
