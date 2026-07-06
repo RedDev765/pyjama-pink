@@ -601,12 +601,11 @@ function renderProducts(){
   });
 
   body.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openProductModal(b.dataset.edit)));
-  body.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => {
+  body.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', async () => {
     if (confirm('Supprimer ce produit ?')){
       products = products.filter(p => p.id !== b.dataset.delete);
-      saveProducts(products);
+      await saveProducts(products);
       renderProducts();
-      showToast('Produit supprimé');
     }
   }));
 }
@@ -667,7 +666,7 @@ document.getElementById('product-photo-input').addEventListener('change', (e) =>
   reader.readAsDataURL(file);
 });
 
-document.getElementById('product-save').addEventListener('click', () => {
+document.getElementById('product-save').addEventListener('click', async () => {
   const name = document.getElementById('product-name').value.trim();
   const category = document.getElementById('product-category').value;
   const price = parseFloat(document.getElementById('product-price').value) || 0;
@@ -677,24 +676,21 @@ document.getElementById('product-save').addEventListener('click', () => {
   if (!name){ showToast('Ajoute un nom de produit'); return; }
 
   if (stock <= 0 && id) {
-    if (!confirm('Stock à zéro. Supprimer ce produit ?')) return;
+    if (!confirm('Stock a zero. Supprimer ce produit ?')) return;
     products = products.filter(p => p.id !== id);
-    saveProducts(products);
+    await saveProducts(products);
     renderProducts();
     closeProductModal();
-    showToast('Produit supprimé (stock épuisé)');
     return;
   }
 
   if (id){
     const p = products.find(x => x.id === id);
     p.name = name; p.category = category; p.price = price; p.stock = stock; p.photo = currentPhotoData;
-    showToast('Produit mis à jour');
   } else {
     products.push({ id: 'p' + Date.now(), name, category, price, stock, photo: currentPhotoData });
-    showToast('Produit ajouté');
   }
-  saveProducts(products);
+  await saveProducts(products);
   renderProducts();
   closeProductModal();
 });
