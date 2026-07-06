@@ -1567,6 +1567,7 @@
       const res = await fetch(API_BASE + '/api/products');
       if (!res.ok) throw new Error('API error');
       const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) return null;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
       return data;
@@ -1599,7 +1600,7 @@
 
     if (pyjamaGrid) {
       pyjamaGrid.innerHTML = pyjamas.map(p => `
-        <div class="card reveal" data-id="${p.id}">
+        <div class="card" data-id="${p.id}">
           <div class="card-photo">
             ${p.photo ? `<img src="${p.photo}" loading="lazy" alt="${p.name}">` : `<img src="https://picsum.photos/seed/${p.id}/500/625" loading="lazy" alt="${p.name}">`}
             <div class="card-photo-tint" style="background:linear-gradient(160deg, #F6E4EC, #EFE1F6);"></div>
@@ -1615,7 +1616,7 @@
 
     if (lingerieGrid) {
       lingerieGrid.innerHTML = lingeries.map(p => `
-        <div class="card reveal" data-id="${p.id}">
+        <div class="card" data-id="${p.id}">
           <div class="card-photo">
             ${p.photo ? `<img src="${p.photo}" loading="lazy" alt="${p.name}">` : `<img src="https://picsum.photos/seed/${p.id}/500/625" loading="lazy" alt="${p.name}">`}
             <div class="card-photo-tint" style="background:linear-gradient(160deg, #2C1D45, #241638);"></div>
