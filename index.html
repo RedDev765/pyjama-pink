@@ -21,9 +21,6 @@
 <meta name="twitter:title" content="Pyjama Pink — Pyjamas & Lingerie douceur au Maroc">
 <meta name="twitter:description" content="Pyjamas et lingerie douceur au Maroc. Commandez sur WhatsApp, livraison rapide.">
 <script type="application/ld+json">
-  window.onerror = (msg, src, line, col, err) => {
-  alert(`${msg}\nLigne: ${line}`);
-};
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -1543,9 +1540,6 @@
 <div id="dbg" style="position:fixed;bottom:8px;right:8px;background:rgba(0,0,0,0.7);color:#fff;font:12px monospace;padding:4px 8px;border-radius:6px;z-index:9999;display:none;"></div>
 
 <script>
-  window.onerror = (msg, src, line, col, err) => {
-  alert(`${msg}\nLigne: ${line}`);
-};
   const API_BASE = '';
   const STORAGE_KEY = 'pyjamapink_products';
   const VERSION_KEY = 'pyjamapink_version';
@@ -1557,27 +1551,16 @@
     localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
   }
 
-  window.__lastApiError = null;
   async function loadFromApi() {
     try {
       const res = await fetch(API_BASE + '/api/products');
-      if (!res.ok) {
-        let bodySnippet = '';
-        try { bodySnippet = (await res.text()).slice(0, 80); } catch (e2) {}
-        throw new Error('HTTP ' + res.status + ' ' + res.statusText + ' | ' + bodySnippet);
-      }
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        const bodySnippet = (await res.text()).slice(0, 80);
-        throw new Error('Réponse non-JSON (content-type: ' + contentType + ') | ' + bodySnippet);
-      }
+      if (!res.ok) throw new Error('API error: ' + res.status);
       const data = await res.json();
       if (!Array.isArray(data)) return null;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
       return data;
     } catch (e) {
-      window.__lastApiError = e.message || String(e);
       console.error('loadFromApi failed:', e);
       return null;
     }
@@ -1783,27 +1766,17 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
 
   // Affiche les produits immédiatement depuis le cache, puis met à jour via l'API
   renderDynamicProducts();
-  const dbg = document.getElementById('dbg');
-  loadFromApi().then(apiData => {
-    if (apiData) {
-      dbg.textContent = 'API OK: ' + apiData.length + ' produits';
-      dbg.style.display = 'block';
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.grid').forEach(g => g.innerHTML = '');
-        renderDynamicProducts();
-      });
-    } else {
-      dbg.textContent = 'API échec: ' + (window.__lastApiError || 'raison inconnue');
-      dbg.style.display = 'block';
-    }
-  });
-  // Sécurité : si après 5s les grilles sont vides, on force l'affichage
-  setTimeout(() => {
-    const grids = document.querySelectorAll('.grid');
-    let empty = true;
-    grids.forEach(g => { if (g.children.length > 0 && g.children[0].offsetParent !== null) empty = false; });
-    if (empty) renderDynamicProducts();
-  }, 5000);
+  // Si le serveur a déjà injecté les produits, pas besoin de fetch API en plus
+  if (!window.__INITIAL_PRODUCTS__) {
+    loadFromApi().then(apiData => {
+      if (apiData) {
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.grid').forEach(g => g.innerHTML = '');
+          renderDynamicProducts();
+        });
+      }
+    });
+  }
 
   /* ---------- PRODUCT MODAL ---------- */
   const modal = document.getElementById('productModal');
