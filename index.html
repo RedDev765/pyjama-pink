@@ -1557,16 +1557,27 @@
     localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
   }
 
+  window.__lastApiError = null;
   async function loadFromApi() {
     try {
       const res = await fetch(API_BASE + '/api/products');
-      if (!res.ok) throw new Error('API error: ' + res.status);
+      if (!res.ok) {
+        let bodySnippet = '';
+        try { bodySnippet = (await res.text()).slice(0, 80); } catch (e2) {}
+        throw new Error('HTTP ' + res.status + ' ' + res.statusText + ' | ' + bodySnippet);
+      }
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const bodySnippet = (await res.text()).slice(0, 80);
+        throw new Error('Réponse non-JSON (content-type: ' + contentType + ') | ' + bodySnippet);
+      }
       const data = await res.json();
       if (!Array.isArray(data)) return null;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
       return data;
     } catch (e) {
+      window.__lastApiError = e.message || String(e);
       console.error('loadFromApi failed:', e);
       return null;
     }
@@ -1782,7 +1793,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, 
         renderDynamicProducts();
       });
     } else {
-      dbg.textContent = 'API: échec (null)';
+      dbg.textContent = 'API échec: ' + (window.__lastApiError || 'raison inconnue');
       dbg.style.display = 'block';
     }
   });
