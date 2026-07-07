@@ -26,8 +26,7 @@ function supabaseHeaders() {
   };
 }
 
-async function getProducts(env) {
-  // 1. Try Supabase
+async function getProducts() {
   const url = SUPABASE_URL + '/rest/v1/store?key=eq.' + STORAGE_KEY + '&select=value';
   const res = await fetch(url, { headers: supabaseHeaders() });
   if (res.ok) {
@@ -36,23 +35,6 @@ async function getProducts(env) {
       return rows[0].value;
     }
   }
-
-  // 2. Fallback: try KV (auto-migration si le quota est disponible)
-  if (env && env.PRODUCTS_KV) {
-    try {
-      const raw = await env.PRODUCTS_KV.get(STORAGE_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        if (Array.isArray(data) && data.length > 0) {
-          // Auto-migrate vers Supabase
-          await saveProducts(data);
-          return data;
-        }
-      }
-    } catch (e) {}
-  }
-
-  // 3. Seed defaults to Supabase
   await saveProducts(DEFAULT_PRODUCTS);
   return DEFAULT_PRODUCTS;
 }
@@ -81,7 +63,7 @@ function jsonResponse(data, status) {
 }
 
 export async function onRequest(context) {
-  const { request, env } = context;
+  const { request } = context;
   const url = new URL(request.url);
   const method = request.method;
   const path = url.pathname;
@@ -107,14 +89,14 @@ export async function onRequest(context) {
 
   // GET /api/products — list all
   if (method === 'GET' && path === '/api/products') {
-    const products = await getProducts(env);
+    const products = await getProducts();
     return jsonResponse(products);
   }
 
   // POST /api/products — create
   if (method === 'POST' && path === '/api/products') {
     const body = await request.json();
-    const products = await getProducts(env);
+    const products = await getProducts();
     products.push(body);
     await saveProducts(products);
     return jsonResponse(body, 201);
@@ -125,7 +107,7 @@ export async function onRequest(context) {
   if (method === 'PUT' && putMatch) {
     const id = putMatch[1];
     const body = await request.json();
-    let products = await getProducts(env);
+    let products = await getProducts();
     const idx = products.findIndex(p => p.id === id);
     if (idx === -1) return jsonResponse({ error: 'not found' }, 404);
     products[idx] = Object.assign({}, products[idx], body, { id: id });
@@ -136,7 +118,7 @@ export async function onRequest(context) {
   // DELETE /api/products/:id — delete
   if (method === 'DELETE' && putMatch) {
     const id = putMatch[1];
-    let products = await getProducts(env);
+    let products = await getProducts();
     products = products.filter(p => p.id !== id);
     await saveProducts(products);
     return jsonResponse({ ok: true });
@@ -146,21 +128,6 @@ export async function onRequest(context) {
   if (method === 'GET' && path === '/api/seed') {
     await saveProducts(DEFAULT_PRODUCTS);
     return jsonResponse({ ok: true, count: DEFAULT_PRODUCTS.length });
-  }
-
-  // GET /api/migrate-from-kv — copy KV to Supabase (after quota reset)
-  if (method === 'GET' && path === '/api/migrate-from-kv') {
-    if (!env || !env.PRODUCTS_KV) return jsonResponse({ error: 'KV not bound' }, 400);
-    try {
-      const raw = await env.PRODUCTS_KV.get(STORAGE_KEY);
-      if (!raw) return jsonResponse({ error: 'No data in KV' }, 404);
-      const products = JSON.parse(raw);
-      if (!Array.isArray(products) || products.length === 0) return jsonResponse({ error: 'Empty products array' }, 404);
-      await saveProducts(products);
-      return jsonResponse({ ok: true, count: products.length, products: products });
-    } catch (e) {
-      return jsonResponse({ error: 'KV read failed: ' + e.message }, 500);
-    }
   }
 
   // POST /api/upload — store photo as URL reference
