@@ -1540,10 +1540,10 @@
 <div id="dbg" style="position:fixed;bottom:8px;right:8px;background:rgba(0,0,0,0.7);color:#fff;font:12px monospace;padding:4px 8px;border-radius:6px;z-index:9999;display:none;"></div>
 
 <script>
-  const API_BASE = 'https://pyjama-pink.pages.dev'; // URL complète pour éviter les soucis relatifs
+  const API_BASE = '';
   const STORAGE_KEY = 'pyjamapink_products';
   const VERSION_KEY = 'pyjamapink_version';
-  const CURRENT_VERSION = '2.1';
+  const CURRENT_VERSION = '2.2';
 
   // Force reset localStorage si la version change (cache iPhone)
   if (localStorage.getItem(VERSION_KEY) !== CURRENT_VERSION) {
@@ -1553,7 +1553,7 @@
 
   async function loadFromApi() {
     try {
-      const res = await fetch(API_BASE + '/api/products?_=' + Date.now());
+      const res = await fetch(API_BASE + '/api/products');
       if (!res.ok) throw new Error('API error: ' + res.status);
       const data = await res.json();
       if (!Array.isArray(data)) return null;
@@ -1568,6 +1568,11 @@
 
   function loadProducts() {
     try {
+      if (window.__INITIAL_PRODUCTS__ && Array.isArray(window.__INITIAL_PRODUCTS__) && window.__INITIAL_PRODUCTS__.length > 0) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(window.__INITIAL_PRODUCTS__));
+        localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+        return [...window.__INITIAL_PRODUCTS__];
+      }
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return [];
       return JSON.parse(raw);
