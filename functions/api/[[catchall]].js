@@ -163,5 +163,37 @@ export async function onRequest(context) {
     }
   }
 
+  // POST /api/upload — store photo as URL reference
+  if (method === 'POST' && path === '/api/upload') {
+    const { id, photo } = await request.json();
+    if (!id || !photo) return jsonResponse({ error: 'missing id or photo' }, 400);
+    const purl = SUPABASE_URL + '/rest/v1/product_photos';
+    const pres = await fetch(purl, {
+      method: 'POST',
+      headers: Object.assign({}, supabaseHeaders(), { 'Prefer': 'resolution=merge-duplicates' }),
+      body: JSON.stringify({ id: id, photo: photo })
+    });
+    if (!pres.ok) return jsonResponse({ error: 'upload failed' }, 500);
+    return jsonResponse({ url: '/api/photo/' + id });
+  }
+
+  // GET /api/photo/:id — serve stored photo
+  const photoMatch = path.match(/^\/api\/photo\/(.+)$/);
+  if (method === 'GET' && photoMatch) {
+    const id = photoMatch[1];
+    const purl = SUPABASE_URL + '/rest/v1/product_photos?id=eq.' + id + '&select=photo';
+    const pres = await fetch(purl, { headers: supabaseHeaders() });
+    if (!pres.ok) return jsonResponse({ error: 'not found' }, 404);
+    const rows = await pres.json();
+    if (rows.length === 0) return jsonResponse({ error: 'not found' }, 404);
+    const raw = rows[0].photo;
+    const comma = raw.indexOf(',');
+    const b64 = comma >= 0 ? raw.slice(comma + 1) : raw;
+    const binary = Uint8Array.from(atob(b64), function(c) { return c.charCodeAt(0); });
+    return new Response(binary, {
+      headers: { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=31536000' }
+    });
+  }
+
   return jsonResponse({ error: 'not found' }, 404);
 }

@@ -638,16 +638,30 @@ productModal.addEventListener('click', (e) => { if (e.target === productModal) c
 document.getElementById('photo-drop').addEventListener('click', () => {
   document.getElementById('product-photo-input').click();
 });
-document.getElementById('product-photo-input').addEventListener('change', (e) => {
+document.getElementById('product-photo-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (ev) => {
-    currentPhotoData = ev.target.result;
+  reader.onload = async (ev) => {
+    const b64 = ev.target.result;
     const preview = document.getElementById('photo-preview');
-    preview.src = currentPhotoData;
+    preview.src = b64;
     preview.style.display = 'block';
     document.getElementById('photo-drop-text').textContent = 'Changer la photo';
+    try {
+      const uploadId = 'p' + Date.now();
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: uploadId, photo: b64 })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        currentPhotoData = data.url;
+      }
+    } catch(e) {
+      currentPhotoData = b64;
+    }
   };
   reader.readAsDataURL(file);
 });
