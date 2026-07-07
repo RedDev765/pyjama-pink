@@ -1,10 +1,7 @@
-// Pyjama Pink — API via Cloudflare Pages Functions
-// Ce fichier est automatiquement déployé par Pages.
-// Pas besoin de Worker séparé.
+const SUPABASE_URL = 'https://opjplhklqnndjceacvqn.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wanBsaGtscW5uZGpjZWFjdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0MzQ2OTIsImV4cCI6MjA5OTAxMDY5Mn0.NXuzjoMtu25WZOarR3X6jVfdBDLyNycftM56-79tHkg';
 
 const STORAGE_KEY = 'pyjamapink_products';
-const VERSION_KEY = 'pyjamapink_version';
-const CURRENT_VERSION = '2.0';
 
 const DEFAULT_PRODUCTS = [
   { id: 'p1', name: 'Pyjama Feuilles Corail', category: 'pyjama', price: 149, stock: 6, photo: 'https://images.unsplash.com/photo-1770294758981-484ef12c1815?w=500&h=625&fit=crop', desc: 'Matinées douces et brunchs tranquilles. Coupe classique, tissu léger et respirant parfait pour traîner à la maison.' },
@@ -21,9 +18,58 @@ const DEFAULT_PRODUCTS = [
   { id: 'p12', name: 'Nuisette Minimaliste', category: 'lingerie', price: 245, stock: 4, photo: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=625&fit=crop', desc: 'Nuisette minimaliste en microfibre douce. Coupe épurée, confort absolu. L\'essentiel pour se sentir bien.' },
 ];
 
-function jsonResponse(data, status = 200) {
+function supabaseHeaders() {
+  return {
+    'apikey': SUPABASE_ANON_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+    'Content-Type': 'application/json'
+  };
+}
+
+async function getProducts(env) {
+  // 1. Try Supabase
+  const url = SUPABASE_URL + '/rest/v1/store?key=eq.' + STORAGE_KEY + '&select=value';
+  const res = await fetch(url, { headers: supabaseHeaders() });
+  if (res.ok) {
+    const rows = await res.json();
+    if (rows.length > 0 && rows[0].value && rows[0].value.length > 0) {
+      return rows[0].value;
+    }
+  }
+
+  // 2. Fallback: try KV (auto-migration si le quota est disponible)
+  if (env && env.PRODUCTS_KV) {
+    try {
+      const raw = await env.PRODUCTS_KV.get(STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data) && data.length > 0) {
+          // Auto-migrate vers Supabase
+          await saveProducts(data);
+          return data;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 3. Seed defaults to Supabase
+  await saveProducts(DEFAULT_PRODUCTS);
+  return DEFAULT_PRODUCTS;
+}
+
+async function saveProducts(products) {
+  const url = SUPABASE_URL + '/rest/v1/store';
+  await fetch(url, {
+    method: 'POST',
+    headers: Object.assign({}, supabaseHeaders(), { 'Prefer': 'resolution=merge-duplicates' }),
+    body: JSON.stringify({ key: STORAGE_KEY, value: products })
+  });
+}
+
+function jsonResponse(data, status) {
+  if (status === undefined) status = 200;
   return new Response(JSON.stringify(data), {
-    status,
+    status: status,
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
@@ -34,43 +80,28 @@ function jsonResponse(data, status = 200) {
   });
 }
 
-async function getProducts(env) {
-  const raw = await env.PRODUCTS_KV.get(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
-  await env.PRODUCTS_KV.put(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
-  await env.PRODUCTS_KV.put(VERSION_KEY, CURRENT_VERSION);
-  return DEFAULT_PRODUCTS;
-}
-
-async function saveProducts(env, products) {
-  await env.PRODUCTS_KV.put(STORAGE_KEY, JSON.stringify(products));
-  await env.PRODUCTS_KV.put(VERSION_KEY, CURRENT_VERSION);
-}
-
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const method = request.method;
+  const path = url.pathname;
 
-  // CORS preflight
   if (method === 'OPTIONS') {
     return new Response(null, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
-      'Cache-Control': 'no-cache, no-store, must-revalidate'
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
       }
     });
   }
-
-  const path = url.pathname;
 
   // POST /api/products/reorder — batch save
   if (method === 'POST' && path === '/api/products/reorder') {
     const body = await request.json();
     if (!Array.isArray(body)) return jsonResponse({ error: 'invalid body' }, 400);
-    await saveProducts(env, body);
+    await saveProducts(body);
     return jsonResponse({ ok: true, count: body.length });
   }
 
@@ -85,7 +116,7 @@ export async function onRequest(context) {
     const body = await request.json();
     const products = await getProducts(env);
     products.push(body);
-    await saveProducts(env, products);
+    await saveProducts(products);
     return jsonResponse(body, 201);
   }
 
@@ -97,8 +128,8 @@ export async function onRequest(context) {
     let products = await getProducts(env);
     const idx = products.findIndex(p => p.id === id);
     if (idx === -1) return jsonResponse({ error: 'not found' }, 404);
-    products[idx] = { ...products[idx], ...body, id };
-    await saveProducts(env, products);
+    products[idx] = Object.assign({}, products[idx], body, { id: id });
+    await saveProducts(products);
     return jsonResponse(products[idx]);
   }
 
@@ -107,14 +138,29 @@ export async function onRequest(context) {
     const id = putMatch[1];
     let products = await getProducts(env);
     products = products.filter(p => p.id !== id);
-    await saveProducts(env, products);
+    await saveProducts(products);
     return jsonResponse({ ok: true });
   }
 
-  // GET /api/seed — re-seed
+  // GET /api/seed — re-seed to defaults
   if (method === 'GET' && path === '/api/seed') {
-    await saveProducts(env, DEFAULT_PRODUCTS);
+    await saveProducts(DEFAULT_PRODUCTS);
     return jsonResponse({ ok: true, count: DEFAULT_PRODUCTS.length });
+  }
+
+  // GET /api/migrate-from-kv — copy KV to Supabase (after quota reset)
+  if (method === 'GET' && path === '/api/migrate-from-kv') {
+    if (!env || !env.PRODUCTS_KV) return jsonResponse({ error: 'KV not bound' }, 400);
+    try {
+      const raw = await env.PRODUCTS_KV.get(STORAGE_KEY);
+      if (!raw) return jsonResponse({ error: 'No data in KV' }, 404);
+      const products = JSON.parse(raw);
+      if (!Array.isArray(products) || products.length === 0) return jsonResponse({ error: 'Empty products array' }, 404);
+      await saveProducts(products);
+      return jsonResponse({ ok: true, count: products.length, products: products });
+    } catch (e) {
+      return jsonResponse({ error: 'KV read failed: ' + e.message }, 500);
+    }
   }
 
   return jsonResponse({ error: 'not found' }, 404);
